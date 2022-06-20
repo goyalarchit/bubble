@@ -153,7 +153,7 @@ actionToName msg =
     case msg of 
         SwapAndMoveLeft -> "Swap And Move (LeftChild)"
         SwapAndMoveRight -> "Swap And Move (RightChild)"
-        ChangeParentAndReset -> "ChangeParent And Reset"
+        ChangeParentAndReset -> "Move (PreviousNode)"
         GotRandom a -> "Internal"
 
 btns =

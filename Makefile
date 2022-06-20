@@ -33,6 +33,8 @@ build_apps:
 	fi
 	@echo "Compiling Elm Files"
 	elm make src/BubbleSortTest.elm --output public/js/bubbleSortTest.js
+	elm make src/HeapifyTest.elm --output public/js/heapifyTest.js
+	elm make src/HeapSortTest.elm --output public/js/heapSortTest.js
 
 all:	init build_html build_apps
 

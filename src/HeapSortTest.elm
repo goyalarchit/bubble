@@ -107,9 +107,9 @@ update msg state =
 actionToName : Msg -> String 
 actionToName msg = 
     case msg of 
-        SwapAndMoveLeft -> "Swap And Move (LeftChild)"
-        SwapAndMoveRight -> "Swap And Move (RightChild)"
-        SwapIBAndDecrB -> "Swap i,b And Decr b"
+        SwapAndMoveLeft -> "Swap And Move(LeftChild)"
+        SwapAndMoveRight -> "Swap And Move(RightChild)"
+        SwapIBAndDecrB -> "Swap i,b And Move(PreviousNode)"
         ResetI -> "Reset i"
         GotRandom a -> "Internal"
 
