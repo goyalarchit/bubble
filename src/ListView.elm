@@ -82,10 +82,10 @@ cell x y v idx label selected inplace m =
         cfn =
             case ( selected, inplace ) of
                 ( True, True ) ->
-                    crc_ "#AED581" strokeColor "2px" "4" 0.5 cell_radius
+                    crc_ "#AED581" strokeColor "2px" "14" 0.5 cell_radius
 
                 ( True, False ) ->
-                    crc_ regularFill strokeColor "2px" "4" 0.5 cell_radius
+                    crc_ regularFill strokeColor "2px" "14" 0.5 cell_radius
 
                 ( False, True ) ->
                     crc_ "#AED581" "#fff" "1px" "" 1 cell_radius
@@ -95,7 +95,7 @@ cell x y v idx label selected inplace m =
 
         idxCrc =
             if selected then
-                crc_ "#fff" "#F44336" "2px" "4" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" "#F44336" "2px" "7" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
 
             else
                 crc_ "#fff" "#fff" "1px" "" 1 (cell_radius / 2) 0 (cell_radius * 2)
@@ -225,10 +225,10 @@ drawCell opts selected inplace idx v x y =
         cfn =
             case ( selected, inplace ) of
                 ( True, True ) ->
-                    crc_ cellColor strokeColor "2px" "4" 0.5 cell_radius
+                    crc_ cellColor strokeColor "2px" "14" 0.5 cell_radius
 
                 ( True, False ) ->
-                    crc_ cellColor strokeColor "2px" "4" 0.5 cell_radius
+                    crc_ cellColor strokeColor "2px" "14" 0.5 cell_radius
 
                 ( False, True ) ->
                     crc_ cellColor strokeColor "1px" "" 1 cell_radius
@@ -238,7 +238,7 @@ drawCell opts selected inplace idx v x y =
 
         idxCrc =
             if selected then
-                crc_ "#fff" labelStrokeColor "2px" "4" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" labelStrokeColor "2px" "7" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
 
             else
                 crc_ "#fff" labelStrokeColor "1px" "" 1 (cell_radius / 2) 0 (cell_radius * 2)
