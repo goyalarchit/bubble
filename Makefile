@@ -43,6 +43,9 @@ clean:
 
 rebuild:	clean all
 
+serve:
+	python3 -m http.server 1234
+
 deploy_aws:
 	@echo "running aws_prod_deploy_job"
 	pip install awscli

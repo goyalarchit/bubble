@@ -5,13 +5,15 @@ module ListView exposing
     , cells
     , drawcells
     , no_options
+    , viewNums
+    , viewVars
     )
 
+import Html exposing (Html)
 import Html.Attributes as HA
 import List.Extra as LE
 import Svg exposing (Svg)
 import Svg.Attributes as SA
-import Svg.Events as SE
 
 
 cell_radius =
@@ -23,25 +25,26 @@ cell_gap =
 
 
 strokeColor =
-    "#F44336"
+    "#3465A4"
 
 
 regularFill =
-    "#FFF59D"
+    "#B2EBF2"
 
 
 inplaceFill =
-    "#AED581"
+    "#B2EBF2"
 
 
-crc_ col strokeCol td r x y =
+crc_ col strokeCol strokeWidth strokeDA td r x y =
     Svg.circle
         [ SA.cx (String.fromFloat x)
         , SA.cy (String.fromFloat y)
         , SA.r (String.fromFloat r)
         , SA.fill col
         , SA.stroke strokeCol
-        , SA.strokeWidth "4"
+        , SA.strokeWidth strokeWidth
+        , SA.strokeDasharray strokeDA
         , HA.style "transition" <| String.replace "{n}" (String.fromFloat td) "all {n}s ease-in-out"
         ]
         []
@@ -79,23 +82,23 @@ cell x y v idx label selected inplace m =
         cfn =
             case ( selected, inplace ) of
                 ( True, True ) ->
-                    crc_ "#AED581" strokeColor 0.5 cell_radius
+                    crc_ "#AED581" strokeColor "2px" "4" 0.5 cell_radius
 
                 ( True, False ) ->
-                    crc_ regularFill strokeColor 0.5 cell_radius
+                    crc_ regularFill strokeColor "2px" "4" 0.5 cell_radius
 
                 ( False, True ) ->
-                    crc_ "#AED581" "#fff" 1 cell_radius
+                    crc_ "#AED581" "#fff" "1px" "" 1 cell_radius
 
                 ( False, False ) ->
-                    crc_ regularFill "#fff" 1 cell_radius
+                    crc_ regularFill "#fff" "1px" "" 1 cell_radius
 
         idxCrc =
             if selected then
-                crc_ "#fff" "#F44336" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" "#F44336" "2px" "4" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
 
             else
-                crc_ "#fff" "#fff" 1 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" "#fff" "1px" "" 1 (cell_radius / 2) 0 (cell_radius * 2)
     in
     Svg.g
         [ SA.transform
@@ -222,23 +225,23 @@ drawCell opts selected inplace idx v x y =
         cfn =
             case ( selected, inplace ) of
                 ( True, True ) ->
-                    crc_ cellColor strokeColor 0.5 cell_radius
+                    crc_ cellColor strokeColor "2px" "4" 0.5 cell_radius
 
                 ( True, False ) ->
-                    crc_ cellColor strokeColor 0.5 cell_radius
+                    crc_ cellColor strokeColor "2px" "4" 0.5 cell_radius
 
                 ( False, True ) ->
-                    crc_ cellColor "#fff" 1 cell_radius
+                    crc_ cellColor strokeColor "1px" "" 1 cell_radius
 
                 ( False, False ) ->
-                    crc_ cellColor "#fff" 1 cell_radius
+                    crc_ cellColor strokeColor "1px" "" 1 cell_radius
 
         idxCrc =
             if selected then
-                crc_ "#fff" labelStrokeColor 0.5 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" labelStrokeColor "2px" "4" 0.5 (cell_radius / 2) 0 (cell_radius * 2)
 
             else
-                crc_ "#fff" labelStrokeColor 1 (cell_radius / 2) 0 (cell_radius * 2)
+                crc_ "#fff" labelStrokeColor "1px" "" 1 (cell_radius / 2) 0 (cell_radius * 2)
     in
     Svg.g
         [ SA.transform
@@ -304,3 +307,76 @@ drawcells nums selected =
             )
             nums
         )
+
+
+
+-- V I E W      H E L P E R S
+
+
+viewVars : List ( String, Int ) -> Html msg
+viewVars vars =
+    Html.div
+        [ HA.style "font-family" "monospace"
+        , HA.style "font-size" "1.3em"
+        , HA.style "display" "flex"
+        , HA.style "flex-direction" "column"
+        , HA.style "justify-content" "center"
+        ]
+        (List.map
+            (\( name, val ) ->
+                Html.div
+                    []
+                    [ Html.text <| name ++ " = " ++ String.fromInt val
+                    ]
+            )
+            vars
+        )
+
+
+viewNums : List Int -> Int -> Int -> Html msg
+viewNums nums iter bndry =
+    let
+        lwidth =
+            1100
+    in
+    Html.div
+        [ HA.style "display" "flex"
+        , HA.style "justify-content" "center"
+        , HA.style "flex-grow" "1"
+        ]
+        [ Svg.svg
+            [ SA.viewBox <| "0 0 " ++ String.fromInt lwidth ++ " 300"
+            , HA.style "height" "100%"
+            , HA.style "width" "100%"
+            ]
+            [ drawcells
+                (List.indexedMap
+                    (\i n ->
+                        if i == bndry then
+                            ( n
+                            , Just
+                                { cellColor = Nothing
+                                , textColor = Nothing
+                                , label = Just "b"
+                                , labelStrokeColor = Just "#aed"
+                                }
+                            )
+
+                        else if i == iter then
+                            ( n
+                            , Just
+                                { cellColor = Nothing
+                                , textColor = Nothing
+                                , label = Just "i"
+                                , labelStrokeColor = Nothing
+                                }
+                            )
+
+                        else
+                            ( n, Nothing )
+                    )
+                    nums
+                )
+                [ iter, iter + 1 ]
+            ]
+        ]

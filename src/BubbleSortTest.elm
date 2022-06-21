@@ -8,8 +8,6 @@ import List.Extra as LE
 import ListView as LV
 import Random as R
 import Render as R
-import Svg exposing (svg)
-import Svg.Attributes as SA
 import Utils exposing (..)
 
 
@@ -186,9 +184,11 @@ view state =
             state.ts
     in
     Html.div
-        []
-        [ viewVars [ ( "index (i)", i ), ( "boundary (b)", b ) ]
-        , viewNums numbers i b
+        [ HA.style "display" "flex"
+        , HA.style "flex" "1"
+        ]
+        [ LV.viewVars [ ( "index (i)", i ), ( "boundary (b)", b ) ]
+        , LV.viewNums numbers i b
         ]
 
 
@@ -225,76 +225,3 @@ main =
         , msgType = msgType
         , analyticsPort = analytics
         }
-
-
-
--- V I E W      H E L P E R S
-
-
-viewVars : List ( String, Int ) -> Html Msg
-viewVars vars =
-    Html.div
-        [ HA.style "font-family" "monospace"
-        , HA.style "font-size" "1.3em"
-        , HA.style "display" "flex"
-        , HA.style "flex-direction" "column"
-        , HA.style "justify-content" "center"
-        ]
-        (List.map
-            (\( name, val ) ->
-                Html.div
-                    []
-                    [ Html.text <| name ++ " = " ++ String.fromInt val
-                    ]
-            )
-            vars
-        )
-
-
-viewNums : List Int -> Int -> Int -> Html Msg
-viewNums nums iter bndry =
-    let
-        lwidth =
-            1100
-    in
-    Html.div
-        [ HA.style "display" "flex"
-        , HA.style "justify-content" "center"
-        , HA.style "flex-grow" "1"
-        ]
-        [ Svg.svg
-            [ SA.viewBox <| "0 0 " ++ String.fromInt lwidth ++ " 300"
-            , HA.style "height" "100%"
-            , HA.style "width" "100%"
-            ]
-            [ LV.drawcells
-                (List.indexedMap
-                    (\i n ->
-                        if i == bndry then
-                            ( n
-                            , Just
-                                { cellColor = Nothing
-                                , textColor = Nothing
-                                , label = Just "b"
-                                , labelStrokeColor = Just "#aed"
-                                }
-                            )
-
-                        else if i == iter then
-                            ( n
-                            , Just
-                                { cellColor = Nothing
-                                , textColor = Nothing
-                                , label = Just "i"
-                                , labelStrokeColor = Nothing
-                                }
-                            )
-
-                        else
-                            ( n, Nothing )
-                    )
-                    nums
-                )
-                [ iter, iter + 1 ]
-            ]
-        ]
