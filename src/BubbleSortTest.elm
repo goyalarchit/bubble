@@ -1,18 +1,17 @@
 port module BubbleSortTest exposing (..)
 
 import DrivingTest as DT exposing (State)
-import Html as H exposing (Html)
-import Graph as G
+import Html exposing (Html)
+import Html.Attributes as HA
 import Json.Encode as JE
 import List.Extra as LE
+import ListView as LV
 import Random as R
 import Render as R
-import Render.StandardDrawers as RSD
-import Render.StandardDrawers.Attributes as RSDA
-import Tuple3 as T3 
-import Dagre.Attributes as DA
-import ListView exposing (createGraph)
+import Svg exposing (svg)
+import Svg.Attributes as SA
 import Utils exposing (..)
+
 
 port analytics : JE.Value -> Cmd msg
 
@@ -30,13 +29,21 @@ type Msg
     | DecrementBAndResetI
     | GotRandom (List Int)
 
-actionToName : Msg -> String 
-actionToName msg = 
-    case msg of 
-        Increment -> "Increment i"
-        SwapAndIncrement -> "Swap And Increment i"
-        DecrementBAndResetI -> "Decrement b And Reset i"
-        GotRandom a -> "Internal"
+
+actionToName : Msg -> String
+actionToName msg =
+    case msg of
+        Increment ->
+            "Increment i"
+
+        SwapAndIncrement ->
+            "Swap And Increment i"
+
+        DecrementBAndResetI ->
+            "Decrement b And Reset i"
+
+        GotRandom _ ->
+            "Internal"
 
 
 update : Msg -> State () Model -> State () Model
@@ -44,24 +51,25 @@ update msg state =
     let
         ts =
             state.ts
+
         n =
-            List.length state.ts.numbers        
+            List.length state.ts.numbers
     in
-    
     case msg of
         Increment ->
-            if ts.i < n - 1 then 
+            if ts.i < n - 1 then
                 let
                     newTS =
                         { ts | i = ts.i + 1 }
                 in
                 { state | ts = newTS }
-            else state
+
+            else
+                state
 
         SwapAndIncrement ->
             if ts.i < n - 1 then
                 let
-
                     nums =
                         LE.swapAt ts.i (ts.i + 1) ts.numbers
 
@@ -69,17 +77,20 @@ update msg state =
                         { ts | i = ts.i + 1, numbers = nums }
                 in
                 { state | ts = newTS }
-            else state
+
+            else
+                state
 
         DecrementBAndResetI ->
-            if ts.b > 0 then 
+            if ts.b > 0 then
                 let
-
                     newTS =
                         { ts | i = 0, b = ts.b - 1 }
                 in
                 { state | ts = newTS }
-            else state 
+
+            else
+                state
 
         GotRandom a ->
             { state | ts = { i = 0, b = List.length a, numbers = a } }
@@ -91,21 +102,33 @@ isEnabled msg state =
         { i, b, numbers } =
             state.ts
 
-        n = (List.length state.ts.numbers)
-        okTxt = (actionToName msg) |> okMessage
+        n =
+            List.length state.ts.numbers
+
+        okTxt =
+            actionToName msg |> okMessage
     in
     case msg of
         Increment ->
-            if i < n - 1 then Ok okTxt
-            else Err (errMessage "i will go out of bounds")
+            if i < n - 1 then
+                Ok okTxt
+
+            else
+                Err (errMessage "i will go out of bounds")
 
         SwapAndIncrement ->
-            if i < n - 1 then Ok okTxt
-            else Err (errMessage "i will go out of bounds")
+            if i < n - 1 then
+                Ok okTxt
+
+            else
+                Err (errMessage "i will go out of bounds")
 
         DecrementBAndResetI ->
-            if b > 0 then Ok okTxt
-            else Err (errMessage "Error! b will go out of bounds")
+            if b > 0 then
+                Ok okTxt
+
+            else
+                Err (errMessage "Error! b will go out of bounds")
 
         GotRandom _ ->
             Ok "You can now begin the test."
@@ -122,11 +145,14 @@ next state =
 
     else if i < b - 1 then
         case ordered i (i + 1) numbers of
-            LT -> 
+            LT ->
                 [ Increment ]
-            EQ -> [Increment,SwapAndIncrement]
-            GT -> [SwapAndIncrement]
 
+            EQ ->
+                [ Increment, SwapAndIncrement ]
+
+            GT ->
+                [ SwapAndIncrement ]
 
     else
         [ DecrementBAndResetI ]
@@ -140,19 +166,18 @@ ordered i j nums =
     in
     case ( ai, aj ) of
         ( Just a_i, Just a_j ) ->
-            if a_i < a_j then LT
-            else if a_i == a_j then EQ 
-            else GT
+            if a_i < a_j then
+                LT
+
+            else if a_i == a_j then
+                EQ
+
+            else
+                GT
 
         _ ->
             GT
 
-xlbl : Model -> (G.Node Int) -> (String,String,Float)
-xlbl model n = 
-    if (n.id == model.i && n.id == model.b) then ("i,b","4 4",2) 
-    else if(n.id == model.i) then ("i","4 4",2) 
-    else if(n.id == model.b) then ("b","4 4",2) 
-    else ("","",1)
 
 view : State () Model -> Html Msg
 view state =
@@ -160,20 +185,11 @@ view state =
         { i, b, numbers } =
             state.ts
     in
-    
-        R.draw
-            [DA.rankDir DA.LR]
-            [ R.style "height: 100%; width: 75%"
-            , R.nodeDrawer (RSD.svgDrawNode 
-            [ RSDA.label (\x -> String.fromInt x.label) 
-            , RSDA.xLabel (xlbl state.ts  >> T3.first) 
-            , RSDA.strokeDashArray (xlbl state.ts  >> T3.second) 
-            , RSDA.strokeWidth (xlbl state.ts  >> T3.third)  
-            ])
-            , R.edgeDrawer (RSD.svgDrawEdge [RSDA.strokeWidth (\x -> 0)])
-            ]
-            (createGraph numbers)
-        
+    Html.div
+        []
+        [ viewVars [ ( "index (i)", i ), ( "boundary (b)", b ) ]
+        , viewNums numbers i b
+        ]
 
 
 btns =
@@ -209,3 +225,76 @@ main =
         , msgType = msgType
         , analyticsPort = analytics
         }
+
+
+
+-- V I E W      H E L P E R S
+
+
+viewVars : List ( String, Int ) -> Html Msg
+viewVars vars =
+    Html.div
+        [ HA.style "font-family" "monospace"
+        , HA.style "font-size" "1.3em"
+        , HA.style "display" "flex"
+        , HA.style "flex-direction" "column"
+        , HA.style "justify-content" "center"
+        ]
+        (List.map
+            (\( name, val ) ->
+                Html.div
+                    []
+                    [ Html.text <| name ++ " = " ++ String.fromInt val
+                    ]
+            )
+            vars
+        )
+
+
+viewNums : List Int -> Int -> Int -> Html Msg
+viewNums nums iter bndry =
+    let
+        lwidth =
+            1100
+    in
+    Html.div
+        [ HA.style "display" "flex"
+        , HA.style "justify-content" "center"
+        , HA.style "flex-grow" "1"
+        ]
+        [ Svg.svg
+            [ SA.viewBox <| "0 0 " ++ String.fromInt lwidth ++ " 300"
+            , HA.style "height" "100%"
+            , HA.style "width" "100%"
+            ]
+            [ LV.drawcells
+                (List.indexedMap
+                    (\i n ->
+                        if i == bndry then
+                            ( n
+                            , Just
+                                { cellColor = Nothing
+                                , textColor = Nothing
+                                , label = Just "b"
+                                , labelStrokeColor = Just "#aed"
+                                }
+                            )
+
+                        else if i == iter then
+                            ( n
+                            , Just
+                                { cellColor = Nothing
+                                , textColor = Nothing
+                                , label = Just "i"
+                                , labelStrokeColor = Nothing
+                                }
+                            )
+
+                        else
+                            ( n, Nothing )
+                    )
+                    nums
+                )
+                [ iter, iter + 1 ]
+            ]
+        ]
