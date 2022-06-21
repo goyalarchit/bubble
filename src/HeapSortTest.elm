@@ -1,19 +1,20 @@
 port module HeapSortTest exposing (..)
 
-
 import DrivingTest as DT exposing (State)
+import Graph as G
+import HeapUtils exposing (..)
 import HeapView exposing (createGraph)
 import Html as H exposing (Html)
+import Html.Attributes as HA
 import Json.Encode as JE
 import List.Extra as LE
+import ListView as LV
 import Random as R
 import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes as RSDA
+import Tuple3 as T3
 import Utils exposing (..)
-import HeapUtils exposing (..)
-import Graph as G 
-import Tuple3 as T3 
 
 
 port analytics : JE.Value -> Cmd msg
@@ -77,50 +78,61 @@ update msg state =
 
             else
                 state
-        
+
         SwapIBAndDecrB ->
-            
             if ts.b > 0 then
                 let
-                    nums = LE.swapAt ts.i ts.b ts.cbt
-                    newTS = { ts | cbt = nums, b = ts.b - 1}
+                    nums =
+                        LE.swapAt ts.i ts.b ts.cbt
+
+                    newTS =
+                        { ts | cbt = nums, b = ts.b - 1 }
                 in
-                    { state | ts = newTS}
-            else 
+                { state | ts = newTS }
+
+            else
                 state
 
-            
-
-        ResetI -> 
+        ResetI ->
             let
-                newTS = { ts | i = 0 }
+                newTS =
+                    { ts | i = 0 }
             in
-                { state | ts = newTS }
+            { state | ts = newTS }
 
         GotRandom a ->
             let
-                n_ = (List.length a)
+                n_ =
+                    List.length a
             in
-            
-            { state | ts = { i = 0, cbt = heapifyTree a, b = n_ - 1} }
-
-actionToName : Msg -> String 
-actionToName msg = 
-    case msg of 
-        SwapAndMoveLeft -> "Swap And Move(LeftChild)"
-        SwapAndMoveRight -> "Swap And Move(RightChild)"
-        SwapIBAndDecrB -> "Swap i,b And Move(PreviousNode)"
-        ResetI -> "Reset i"
-        GotRandom a -> "Internal"
+            { state | ts = { i = 0, cbt = heapifyTree a, b = n_ - 1 } }
 
 
+actionToName : Msg -> String
+actionToName msg =
+    case msg of
+        SwapAndMoveLeft ->
+            "Swap And Move(LeftChild)"
+
+        SwapAndMoveRight ->
+            "Swap And Move(RightChild)"
+
+        SwapIBAndDecrB ->
+            "Swap i,b And Move(PreviousNode)"
+
+        ResetI ->
+            "Reset i"
+
+        GotRandom a ->
+            "Internal"
 
 
 isEnabled : Msg -> State () Model -> Result String String
 isEnabled msg state =
     let
-        { i, b, cbt} =
+        { i, b, cbt } =
             state.ts
+
         n =
             List.length cbt
 
@@ -129,31 +141,37 @@ isEnabled msg state =
 
         rightChild =
             2 * i + 2
-        
-        name = actionToName msg
+
+        name =
+            actionToName msg
     in
     case msg of
-        SwapAndMoveLeft -> 
-            if leftChild < n then Ok (okMessage name)
-            else Err (errMessage "No left child")
+        SwapAndMoveLeft ->
+            if leftChild < n then
+                Ok (okMessage name)
 
-        SwapAndMoveRight -> 
-            if rightChild < n then Ok (okMessage name)
-            else Err (errMessage "No right child")
+            else
+                Err (errMessage "No left child")
 
-        SwapIBAndDecrB -> 
-            if b > 0 then Ok (okMessage name)
-            else Err (errMessage "Cannot decrement boundary")
+        SwapAndMoveRight ->
+            if rightChild < n then
+                Ok (okMessage name)
 
-        ResetI -> 
+            else
+                Err (errMessage "No right child")
+
+        SwapIBAndDecrB ->
+            if b > 0 then
+                Ok (okMessage name)
+
+            else
+                Err (errMessage "Cannot decrement boundary")
+
+        ResetI ->
             Ok (okMessage name)
 
         GotRandom _ ->
             Ok "You can now begin the test."
-        
-        
-
-
 
 
 next : State () Model -> List Msg
@@ -163,33 +181,51 @@ next state =
             state.ts
 
         largest =
-            largestAll i (List.take (b+1) cbt)
+            largestAll i (List.take (b + 1) cbt)
     in
-    if b == 0 then []
-    else if i == 0 && (isHeap (List.take (b+1) cbt)) then
-        [SwapIBAndDecrB]
-    
+    if b == 0 then
+        []
+
+    else if i == 0 && isHeap (List.take (b + 1) cbt) then
+        [ SwapIBAndDecrB ]
 
     else if not (List.member i largest) then
-        List.map 
-        (\j -> if j == 2*i+1 then SwapAndMoveLeft else SwapAndMoveRight) 
-        largest
+        List.map
+            (\j ->
+                if j == 2 * i + 1 then
+                    SwapAndMoveLeft
+
+                else
+                    SwapAndMoveRight
+            )
+            largest
 
     else
         [ ResetI ]
 
-xlbl : Model -> (G.Node Int) -> (String,String,Float)
-xlbl model n = 
-    if (n.id == model.i && n.id == model.b) then ("i,b","4 4",2) 
-    else if(n.id == model.i) then ("i","4 4",2) 
-    else if(n.id == model.b) then ("b","4 4",2) 
-    else ("","",1)
 
-edgeView : Model -> (G.Edge String) -> Float 
-edgeView model e = 
-    if e.from > model.b || e.to > model.b then 0 
-    else 3
+xlbl : Model -> G.Node Int -> ( String, String, Float )
+xlbl model n =
+    if n.id == model.i && n.id == model.b then
+        ( "i,b", "4 4", 2 )
 
+    else if n.id == model.i then
+        ( "i", "4 4", 2 )
+
+    else if n.id == model.b then
+        ( "b", "4 4", 2 )
+
+    else
+        ( "", "", 1 )
+
+
+edgeView : Model -> G.Edge String -> Float
+edgeView model e =
+    if e.from > model.b || e.to > model.b then
+        0
+
+    else
+        3
 
 
 view : State () Model -> Html Msg
@@ -203,15 +239,22 @@ view state =
         [ R.draw
             []
             [ R.style "height: 100%; width: 100%"
-            , R.nodeDrawer (RSD.svgDrawNode 
-            [ RSDA.label (\x -> String.fromInt x.label) 
-            , RSDA.xLabel (xlbl state.ts  >> T3.first) 
-            , RSDA.strokeDashArray (xlbl state.ts  >> T3.second) 
-            , RSDA.strokeWidth (xlbl state.ts  >> T3.third)  
-            ])
-            , R.edgeDrawer (RSD.svgDrawEdge [RSDA.strokeWidth (edgeView state.ts)])
+            , R.nodeDrawer
+                (RSD.svgDrawNode
+                    [ RSDA.label (\x -> String.fromInt x.label)
+                    , RSDA.xLabel (xlbl state.ts >> T3.first)
+                    , RSDA.strokeDashArray (xlbl state.ts >> T3.second)
+                    , RSDA.strokeWidth (xlbl state.ts >> T3.third)
+                    ]
+                )
+            , R.edgeDrawer (RSD.svgDrawEdge [ RSDA.strokeWidth (edgeView state.ts) ])
             ]
             (createGraph cbt)
+        , H.div
+            []
+            [ LV.viewVars [ ( "index (i)", i ), ( "index (b)", b ) ]
+            , LV.viewNums cbt i b
+            ]
         ]
 
 
@@ -225,7 +268,7 @@ btns =
 
 init : () -> ( State () Model, Cmd Msg )
 init _ =
-    ( State () (Model [ 10,9,9,3,5,2,8 ] 0 6), R.generate GotRandom (R.list 7 (R.int 1 10)) )
+    ( State () (Model [ 10, 9, 9, 3, 5, 2, 8 ] 0 6), R.generate GotRandom (R.list 7 (R.int 1 10)) )
 
 
 msgType : Msg -> DT.MsgType
@@ -236,8 +279,6 @@ msgType msg =
 
         _ ->
             DT.TSMsg
-
-
 
 
 main =
