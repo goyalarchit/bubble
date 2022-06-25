@@ -21,7 +21,7 @@
             "elm-community/list-extra": "8.5.2",
             "elm-community/typed-svg": "7.0.0",
             "elm-community/undo-redo": "3.0.0",
-            "goyalarchit/elm-dagre": "2.0.0"
+            "goyalarchit/elm-dagre": "3.0.0"
         },
         "indirect": {
             "avh4/elm-fifo": "1.0.4",

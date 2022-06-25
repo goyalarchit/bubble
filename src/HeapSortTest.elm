@@ -1,5 +1,6 @@
 port module HeapSortTest exposing (..)
 
+import Dagre.Attributes as DA
 import DrivingTest as DT exposing (State)
 import Graph as G
 import HeapUtils exposing (..)
@@ -13,6 +14,7 @@ import Random as R
 import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes as RSDA
+import Render.StandardDrawers.Types as RSDT
 import Tuple3 as T3
 import Utils exposing (..)
 
@@ -239,14 +241,18 @@ view state =
         , HA.style "height" "40vh"
         , HA.style "display" "flex"
         ]
-        [ 
-          R.draw
+        [ R.draw
             []
             [ R.style " width: 50%; height: 100%"
             , R.nodeDrawer
                 (RSD.svgDrawNode
                     [ RSDA.label (\x -> String.fromInt x.label)
-                    , RSDA.xLabel (xlbl state.ts >> T3.first)
+                    , RSDA.xLabels
+                        [ RSD.svgDrawXLabel
+                            [ RSDA.label (xlbl state.ts >> T3.first)
+                            , RSDA.fontSize 16
+                            ]
+                        ]
                     , RSDA.strokeDashArray (xlbl state.ts >> T3.second)
                     , RSDA.strokeWidth (xlbl state.ts >> T3.third)
                     ]
@@ -254,18 +260,95 @@ view state =
             , R.edgeDrawer (RSD.svgDrawEdge [ RSDA.strokeWidth (edgeView state.ts) ])
             ]
             (createGraph cbt)
-
-        -- ]
         , H.div
             [ HA.style "display" "flex"
             , HA.style "flex-direction" "column"
             , HA.style "align-items" "center"
             , HA.style "width" "50%"
+            , HA.style "justify-content" "space-evenly"
             ]
             [ LV.viewVars [ ( "index (i)", i ), ( "index (b)", b ) ]
-            , LV.viewNums cbt i b
+            , viewList state.ts
             ]
         ]
+
+
+
+-- View List
+
+
+viewList : Model -> Html msg
+viewList model =
+    R.draw
+        [ DA.rankDir DA.LR
+        , DA.marginY 40
+        , DA.rankSep 20
+        ]
+        [ R.style "width: 100%;"
+        , R.edgeDrawer
+            (RSD.svgDrawEdge
+                [ RSDA.strokeWidth (\_ -> 0)
+                ]
+            )
+        , R.nodeDrawer
+            (RSD.svgDrawNode
+                [ RSDA.label (\x -> String.fromInt x.label)
+                , RSDA.strokeWidth (changeShape model.i >> T3.second)
+                , RSDA.strokeDashArray (changeShape model.i >> T3.third)
+                , RSDA.xLabels
+                    [ RSD.svgDrawXLabel
+                        [ RSDA.label (\n -> String.fromInt n.id)
+                        , RSDA.pos (\_ w h -> ( 0, h ))
+                        , RSDA.shape (changeShapeXlabel model.i >> T3.first)
+                        , RSDA.strokeWidth (changeShapeXlabel model.i >> T3.second)
+                        , RSDA.strokeDashArray (changeShapeXlabel model.i >> T3.third)
+                        , RSDA.fontSize 10
+                        , RSDA.title (\n -> String.fromInt (n.id + 1))
+                        ]
+                    , RSD.svgDrawXLabel
+                        [ RSDA.label (varLabel ( model.i, model.b ))
+                        , RSDA.pos (\_ w h -> ( 0, -4 * h / 5 ))
+                        , RSDA.fontSize 14
+                        ]
+                    ]
+                ]
+            )
+        ]
+        (LV.createGraph model.cbt)
+
+
+changeShape : Int -> G.Node n -> ( RSDT.Shape, Float, String )
+changeShape idx node =
+    if node.id == idx || node.id == 2 * idx + 1 || node.id == 2 * idx + 2 then
+        ( RSDT.Circle, 2, "4" )
+
+    else
+        ( RSDT.NoShape, 1, "" )
+
+
+changeShapeXlabel : Int -> G.Node n -> ( RSDT.Shape, Float, String )
+changeShapeXlabel idx node =
+    if node.id == idx || node.id == 2 * idx + 1 || node.id == 2 * idx + 2 then
+        ( RSDT.Circle, 1, "4" )
+
+    else
+        ( RSDT.NoShape, 0, "" )
+
+
+varLabel : ( Int, Int ) -> G.Node n -> String
+varLabel ( i, b ) node =
+    case ( node.id == i, node.id == b ) of
+        ( True, True ) ->
+            "i,b"
+
+        ( True, False ) ->
+            "i"
+
+        ( False, True ) ->
+            "b"
+
+        ( False, False ) ->
+            ""
 
 
 btns =

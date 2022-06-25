@@ -1,6 +1,8 @@
 port module BubbleSortTest exposing (..)
 
+import Dagre.Attributes as DA
 import DrivingTest as DT exposing (State)
+import Graph as G
 import Html exposing (Html)
 import Html.Attributes as HA
 import Json.Encode as JE
@@ -8,6 +10,10 @@ import List.Extra as LE
 import ListView as LV
 import Random as R
 import Render as R
+import Render.StandardDrawers as RSD
+import Render.StandardDrawers.Attributes as RSDA
+import Render.StandardDrawers.Types as RSDT
+import Tuple3 as T3
 import Utils exposing (..)
 
 
@@ -188,8 +194,95 @@ view state =
         , HA.style "flex" "1"
         ]
         [ LV.viewVars [ ( "index (i)", i ), ( "boundary (b)", b ) ]
-        , LV.viewNums numbers i b
+        , viewList state.ts
         ]
+
+
+viewList : Model -> Html.Html msg
+viewList model =
+    R.draw
+        [ DA.rankDir DA.LR
+        , DA.marginY 40
+        , DA.rankSep 20
+        ]
+        [ R.style "width: 100%"
+        , R.edgeDrawer
+            (RSD.svgDrawEdge
+                [ RSDA.strokeWidth (\_ -> 0)
+                ]
+            )
+        , R.nodeDrawer
+            (RSD.svgDrawNode
+                [ RSDA.label changeLabel
+                , RSDA.shape (changeShape model.i >> T3.first)
+                , RSDA.strokeWidth (changeShape model.i >> T3.second)
+                , RSDA.strokeDashArray (changeShape model.i >> T3.third)
+                , RSDA.xLabels
+                    [ RSD.svgDrawXLabel
+                        [ RSDA.label (\n -> String.fromInt n.id)
+                        , RSDA.pos (\_ w h -> ( 0, h ))
+                        , RSDA.shape (changeShapeXlabel model.i >> T3.first)
+                        , RSDA.strokeWidth (changeShapeXlabel model.i >> T3.second)
+                        , RSDA.strokeDashArray (changeShapeXlabel model.i >> T3.third)
+                        , RSDA.fontSize 10
+                        , RSDA.title (\n -> String.fromInt (n.id + 1))
+                        ]
+                    , RSD.svgDrawXLabel
+                        [ RSDA.label (varLabel ( model.i, model.b ))
+                        , RSDA.pos (\_ w h -> ( 0, -4 * h / 5 ))
+                        , RSDA.fontSize 14
+                        ]
+                    ]
+                ]
+            )
+        ]
+        (LV.createGraph (List.append model.numbers [ -1 ]))
+
+
+changeShape : Int -> G.Node Int -> ( RSDT.Shape, Float, String )
+changeShape idx node =
+    if node.label == -1 then
+        ( RSDT.NoShape, 1, "" )
+
+    else if node.id == idx || node.id == idx + 1 then
+        ( RSDT.Ellipse, 2, "4" )
+
+    else
+        ( RSDT.Ellipse, 1, "" )
+
+
+changeLabel : G.Node Int -> String
+changeLabel node =
+    if node.label == -1 then
+        ""
+
+    else
+        String.fromInt node.label
+
+
+changeShapeXlabel : Int -> G.Node n -> ( RSDT.Shape, Float, String )
+changeShapeXlabel idx node =
+    if node.id == idx || node.id == idx + 1 then
+        ( RSDT.Circle, 1, "4" )
+
+    else
+        ( RSDT.NoShape, 1, "" )
+
+
+varLabel : ( Int, Int ) -> G.Node n -> String
+varLabel ( i, b ) node =
+    case ( node.id == i, node.id == b ) of
+        ( True, True ) ->
+            "i,b"
+
+        ( True, False ) ->
+            "i"
+
+        ( False, True ) ->
+            "b"
+
+        ( False, False ) ->
+            ""
 
 
 btns =
