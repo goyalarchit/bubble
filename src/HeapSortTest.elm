@@ -235,10 +235,14 @@ view state =
             state.ts
     in
     H.div
-        []
-        [ R.draw
+        [ HA.style "width" "100%"
+        , HA.style "height" "40vh"
+        , HA.style "display" "flex"
+        ]
+        [ 
+          R.draw
             []
-            [ R.style "height: 100%; width: 100%"
+            [ R.style " width: 50%; height: 100%"
             , R.nodeDrawer
                 (RSD.svgDrawNode
                     [ RSDA.label (\x -> String.fromInt x.label)
@@ -250,8 +254,14 @@ view state =
             , R.edgeDrawer (RSD.svgDrawEdge [ RSDA.strokeWidth (edgeView state.ts) ])
             ]
             (createGraph cbt)
+
+        -- ]
         , H.div
-            []
+            [ HA.style "display" "flex"
+            , HA.style "flex-direction" "column"
+            , HA.style "align-items" "center"
+            , HA.style "width" "50%"
+            ]
             [ LV.viewVars [ ( "index (i)", i ), ( "index (b)", b ) ]
             , LV.viewNums cbt i b
             ]
