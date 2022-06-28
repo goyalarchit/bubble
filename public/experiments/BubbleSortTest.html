@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bubble Sort Test</title>
     <link
-    href="/public/assets/css/main.css"
+    href="../assets/css/main.css"
     rel="stylesheet"
     />
     <link rel="icon" href="/public/algodynamics_logo.svg" sizes="any" type="image/svg+xml">
@@ -38,100 +38,100 @@ gtag('js', new Date());
 gtag('config', 'G-83QNS9V0VK');
 </script>
 </head>
-  <body class="flex flex-col h-screen overflow-hidden">
-    <div class="flex bg-gray-800 text-white text-2xl font-medium py-2 px-3 items-center">
-    <a href="https://www.algodynamics.io">
-        <img src="/public/algodynamics_logo.svg" class="logo w-11 h-11 mr-2" title="Algodynamics Home"></img>
-    </a>
-    Bubble Sort Test
+<body class="flex flex-col h-screen overflow-hidden">
+  <div class="flex bg-gray-800 text-white text-2xl font-medium py-2 px-3 items-center">
+  <a href="https://www.algodynamics.io">
+      <img src="/public/algodynamics_logo.svg" class="logo w-11 h-11 mr-2" title="Algodynamics Home"></img>
+  </a>
+  Bubble Sort Test
 </div>
-    <div class="flex bg-gray-700 px-2 flex justify-start items-center">
-  <nav class="flex text-gray-200">
-    <a href="/public/index.html" 
+  <div class="flex bg-gray-700 px-2 flex justify-start items-center">
+<nav class="flex text-gray-200">
+  <a href="/public/index.html" 
+    
+      class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+    >
+      Home
+  </a>
+  
+  
+    
+      <a 
+      
+      href="/public/experiments/BubbleSortTest.html"
+      
+      
+        class="py-1 px-2 bg-gray-400 text-black"
+      >
+        Bubble Sort Test
+      </a>
+    
+  
+    
+      <a 
+      
+      href="/public/experiments/HeapifyTest.html"
+      
       
         class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
       >
-        Home
-    </a>
+        Heapify Test
+      </a>
     
+  
     
+      <a 
       
-        <a 
-        
-        href="/public/experiments/BubbleSortTest.html"
-        
-        
-          class="py-1 px-2 bg-gray-400 text-black"
-        >
-          Bubble Sort Test
-        </a>
+      href="/public/experiments/HeapSortTest.html"
       
+      
+        class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+      >
+        Heap Sort Test
+      </a>
     
-      
-        <a 
-        
-        href="/public/experiments/HeapifyTest.html"
-        
-        
-          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
-        >
-          Heapify Test
-        </a>
-      
-    
-      
-        <a 
-        
-        href="/public/experiments/HeapSortTest.html"
-        
-        
-          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
-        >
-          Heap Sort Test
-        </a>
-      
-    
-  </nav>
+  
+</nav>
 </div>
-    <div class="flex-grow flex overflow-hidden">
-      <div class="w-1/3 bg-gray-200 p-4 overflow-y-scroll">
-        <div class="my-2 text-gray-700 prose">
-          
-          <h1 id="objective">Objective</h1>
+  <div class="flex-grow flex overflow-hidden">
+    <div class="w-1/3 bg-gray-200 p-4 overflow-y-scroll">
+      <div class="my-2 text-gray-700 prose">
+        
+        <h1 id="objective">Objective</h1>
 <p>Apply Bubble Sort Algorithm on the given array to sort it using the provided controls.
 Please note that:</p>
 <ol>
-  <li>You don’t apply any optimizations over original algorithm.</li>
-  <li>Sorting of the array is the secondary objective.The primary objective is correct application of bubble sort algorithm.</li>
+<li>You should not apply any optimizations over the  original algorithm i.e simulate the bubble sort algorithm to completion.</li>
+<li>Sorting of the array is the secondary objective. The primary objective is correct application of bubble sort algorithm.</li>
 </ol>
 
 <h1 id="variables-description">Variables Description</h1>
 
 <table>
-  <thead>
-    <tr>
-      <th style="text-align: center">Variable</th>
-      <th style="text-align: center">Data Type</th>
-      <th style="text-align: center">Valid values</th>
-      <th style="text-align: center">Initialization</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">i</td>
-      <td style="text-align: center">int</td>
-      <td style="text-align: center">[0,n)</td>
-      <td style="text-align: center">0</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">b</td>
-      <td style="text-align: center">int</td>
-      <td style="text-align: center">[0,n]</td>
-      <td style="text-align: center">n</td>
-    </tr>
-  </tbody>
+<thead>
+  <tr>
+    <th style="text-align: center">Variable</th>
+    <th style="text-align: center">Data Type</th>
+    <th style="text-align: center">Valid values</th>
+    <th style="text-align: center">Initialization</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td style="text-align: center">i</td>
+    <td style="text-align: center">int</td>
+    <td style="text-align: center">[0,n)</td>
+    <td style="text-align: center">0</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">b</td>
+    <td style="text-align: center">int</td>
+    <td style="text-align: center">[0,n]</td>
+    <td style="text-align: center">n</td>
+  </tr>
+</tbody>
 </table>
 
 <p>where n is the length of the array.</p>
@@ -139,53 +139,51 @@ Please note that:</p>
 <h1 id="controls-description">Controls Description</h1>
 
 <table>
-  <thead>
-    <tr>
-      <th style="text-align: center">Control</th>
-      <th style="text-align: center">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Increment i</td>
-      <td style="text-align: center">Increments i by 1, if i &lt; n - 1</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Swap And Increment i</td>
-      <td style="text-align: center">Swaps array[i] and array[i+1], and increments i by 1, if i &lt; n - 1</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Decrement b And Reset i</td>
-      <td style="text-align: center">Decrements b by 1 and resets i to 0, if b &gt; 0</td>
-    </tr>
-  </tbody>
+<thead>
+  <tr>
+    <th style="text-align: center">Control</th>
+    <th style="text-align: center">Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td style="text-align: center">Increment i</td>
+    <td style="text-align: center">Increments i by 1, if i &lt; n - 1</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">Swap And Increment i</td>
+    <td style="text-align: center">Swaps array[i] and array[i+1], and increments i by 1, if i &lt; n - 1</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">Decrement b And Reset i</td>
+    <td style="text-align: center">Decrements b by 1 and resets i to 0, if b &gt; 0</td>
+  </tr>
+</tbody>
 </table>
 
 <h1 id="procedure">Procedure</h1>
 <ol>
-  <li>Click on suitable control to simulate next step of bubble sort algorithm.</li>
-  <li>You can do Undo,Redo,Reset by clicking on the respective buttons as per your need.</li>
-  <li>Click on Submit button when you are done.</li>
+<li>Click on suitable control to simulate next step of bubble sort algorithm.</li>
+<li>You can do Undo,Redo,Reset by clicking on the respective buttons as per your need.</li>
+<li>Click on Submit button when you are done.</li>
 </ol>
 
-          
-          
-        </div>
-      </div>
-      <div class="flex-grow flex w-2/3">
-        <div id="elm-app-is-loaded-here"></div>
+        
+        
       </div>
     </div>
-    <div id="footer" class="flex bg-gray-500 justify-center">
-    <h3>
-      Copyright © 2020-2022, 
-      <a href="https://www.algodynamics.io" class="text-blue-800">algodynamics.io</a> 
-      
-    </h3> 
+    <div class="flex-grow flex w-2/3">
+      <div id="elm-app-is-loaded-here"></div>
+    </div>
+  </div>
+  <div id="footer" class="flex bg-gray-500 justify-center">
+  <h3>
+    Copyright © 2020-2022, Algodynamics    
+  </h3> 
 </div>
     <script type="module">
       // Create Axios Client

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Heap Sort Test</title>
     <link
-    href="/public/assets/css/main.css"
+    href="../assets/css/main.css"
     rel="stylesheet"
     />
     <link rel="icon" href="/public/algodynamics_logo.svg" sizes="any" type="image/svg+xml">
@@ -38,95 +38,100 @@ gtag('js', new Date());
 gtag('config', 'G-83QNS9V0VK');
 </script>
 </head>
-  <body class="flex flex-col h-screen overflow-hidden">
-    <div class="flex bg-gray-800 text-white text-2xl font-medium py-2 px-3 items-center">
-    <a href="https://www.algodynamics.io">
-        <img src="/public/algodynamics_logo.svg" class="logo w-11 h-11 mr-2" title="Algodynamics Home"></img>
-    </a>
-    Heap Sort Test
+<body class="flex flex-col h-screen overflow-hidden">
+  <div class="flex bg-gray-800 text-white text-2xl font-medium py-2 px-3 items-center">
+  <a href="https://www.algodynamics.io">
+      <img src="/public/algodynamics_logo.svg" class="logo w-11 h-11 mr-2" title="Algodynamics Home"></img>
+  </a>
+  Heap Sort Test
 </div>
-    <div class="flex bg-gray-700 px-2 flex justify-start items-center">
-  <nav class="flex text-gray-200">
-    <a href="/public/index.html" 
+  <div class="flex bg-gray-700 px-2 flex justify-start items-center">
+<nav class="flex text-gray-200">
+  <a href="/public/index.html" 
+    
+      class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+    >
+      Home
+  </a>
+  
+  
+    
+      <a 
+      
+      href="/public/experiments/BubbleSortTest.html"
+      
       
         class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
       >
-        Home
-    </a>
+        Bubble Sort Test
+      </a>
     
+  
     
+      <a 
       
-        <a 
-        
-        href="/public/experiments/BubbleSortTest.html"
-        
-        
-          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
-        >
-          Bubble Sort Test
-        </a>
+      href="/public/experiments/HeapifyTest.html"
       
+      
+        class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+      >
+        Heapify Test
+      </a>
     
-      
-        <a 
-        
-        href="/public/experiments/HeapifyTest.html"
-        
-        
-          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
-        >
-          Heapify Test
-        </a>
-      
+  
     
+      <a 
       
-        <a 
-        
-        href="/public/experiments/HeapSortTest.html"
-        
-        
-          class="py-1 px-2 bg-gray-400 text-black"
-        >
-          Heap Sort Test
-        </a>
+      href="/public/experiments/HeapSortTest.html"
       
+      
+        class="py-1 px-2 bg-gray-400 text-black"
+      >
+        Heap Sort Test
+      </a>
     
-  </nav>
+  
+</nav>
 </div>
-    <div class="flex-grow flex overflow-hidden">
-      <div class="w-1/3 bg-gray-200 p-4 overflow-y-scroll">
-        <div class="my-2 text-gray-700 prose">
-          
-          <h1 id="objective">Objective</h1>
-<p>Apply Heap Sort Algorithm on the given Max Heap to sort the underlying array using the provided controls.</p>
-
-<h1 id="variables-description">Variables Description</h1>
+  <div class="flex-grow flex overflow-hidden">
+    <div class="w-1/3 bg-gray-200 p-4 overflow-y-scroll">
+      <div class="my-2 text-gray-700 prose">
+        
+        <h1 id="objective">Objective</h1>
+<p>Apply Heap Sort Algorithm on the given Max Heap to sort the underlying array represented by the Complete Binary Tree using the provided controls.
+Please note that:</p>
+<ol>
+<li>You should not apply any optimizations over the original algorithm i.e simulate the heap sort algorithm to completion.</li>
+<li>Sorting of the array is the secondary objective. The primary objective is correct application of heap sort algorithm.
+  <h1 id="variables-description">Variables Description</h1>
+</li>
+</ol>
 
 <table>
-  <thead>
-    <tr>
-      <th style="text-align: center">Variable</th>
-      <th style="text-align: center">Data Type</th>
-      <th style="text-align: center">Valid values</th>
-      <th style="text-align: center">Initialization</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">i</td>
-      <td style="text-align: center">int</td>
-      <td style="text-align: center">[0,n)</td>
-      <td style="text-align: center">0(root node)</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">b</td>
-      <td style="text-align: center">int</td>
-      <td style="text-align: center">[0,n)</td>
-      <td style="text-align: center">n-1(last node)</td>
-    </tr>
-  </tbody>
+<thead>
+  <tr>
+    <th style="text-align: center">Variable</th>
+    <th style="text-align: center">Data Type</th>
+    <th style="text-align: center">Valid values</th>
+    <th style="text-align: center">Initialization</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td style="text-align: center">i</td>
+    <td style="text-align: center">int</td>
+    <td style="text-align: center">[0,n)</td>
+    <td style="text-align: center">0(root node)</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">b</td>
+    <td style="text-align: center">int</td>
+    <td style="text-align: center">[0,n)</td>
+    <td style="text-align: center">n-1(last node)</td>
+  </tr>
+</tbody>
 </table>
 
 <p>where n is the length of the array.</p>
@@ -134,83 +139,81 @@ gtag('config', 'G-83QNS9V0VK');
 <h1 id="controls-description">Controls Description</h1>
 
 <table>
-  <thead>
-    <tr>
-      <th style="text-align: center">Control</th>
-      <th style="text-align: center">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Swap And Move (LeftChild)</td>
-      <td style="text-align: center">If left child of node i exists:</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">1. swaps the value of node i and it’s left child.</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">2. sets i to point to it’s left child.</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Swap And Move (RightChild)</td>
-      <td style="text-align: center">If right child of node i exists:</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">1. swaps the value of node i and it’s right child.</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">2. sets i to point to it’s right child.</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Reset i</td>
-      <td style="text-align: center">Resets i to point to root node .</td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Swap i,b And Move (PreviousNode)</td>
-      <td style="text-align: center">If there exists a node before node b in level order traversal of the tree :</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">1. swap the values of node i and node b.</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center">2. set b to point to it’s previous node.</td>
-    </tr>
-  </tbody>
+<thead>
+  <tr>
+    <th style="text-align: center">Control</th>
+    <th style="text-align: center">Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td style="text-align: center">Swap And Move (LeftChild)</td>
+    <td style="text-align: center">If left child of node i exists:</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">1. swaps the value of node i and its left child.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">2. sets i to point to its left child.</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">Swap And Move (RightChild)</td>
+    <td style="text-align: center">If right child of node i exists:</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">1. swaps the value of node i and its right child.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">2. sets i to point to its right child.</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">Reset i</td>
+    <td style="text-align: center">Resets i to point to root node .</td>
+  </tr>
+</tbody>
+<tbody>
+  <tr>
+    <td style="text-align: center">Swap i,b And Move (PreviousNode)</td>
+    <td style="text-align: center">If there exists a node before node b in level order traversal of the tree :</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">1. swap the values of node i and node b.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center"> </td>
+    <td style="text-align: center">2. set b to point to its previous node.</td>
+  </tr>
+</tbody>
 </table>
 
 <h1 id="procedure">Procedure</h1>
 <ol>
-  <li>Click on suitable control to simulate next step of Heap Sort algorithm.</li>
-  <li>You can do Undo,Redo,Reset by clicking on the respective buttons as per your need.</li>
-  <li>Click on Submit button when you are done.</li>
+<li>Click on suitable control to simulate next step of Heap Sort algorithm.</li>
+<li>You can do Undo,Redo,Reset by clicking on the respective buttons as per your need.</li>
+<li>Click on Submit button when you are done.</li>
 </ol>
 
-          
-          
-        </div>
-      </div>
-      <div class="flex-grow flex w-2/3">
-        <div id="elm-app-is-loaded-here"></div>
+        
+        
       </div>
     </div>
-    <div id="footer" class="flex bg-gray-500 justify-center">
-    <h3>
-      Copyright © 2020-2022, 
-      <a href="https://www.algodynamics.io" class="text-blue-800">algodynamics.io</a> 
-      
-    </h3> 
+    <div class="flex-grow flex w-2/3">
+      <div id="elm-app-is-loaded-here"></div>
+    </div>
+  </div>
+  <div id="footer" class="flex bg-gray-500 justify-center">
+  <h3>
+    Copyright © 2020-2022, Algodynamics    
+  </h3> 
 </div>
 <script type="module">
   // Create Axios Client
