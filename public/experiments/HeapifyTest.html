@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Heapify Test</title>
+    <link
+    href="/public/assets/css/main.css"
+    rel="stylesheet"
+    />
+    <link rel="icon" href="/public/algodynamics_logo.svg" sizes="any" type="image/svg+xml">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="../js/heapifyTest.js"></script>
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Heapify Test</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Heapify Test" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Objective Apply Heapify Algorithm on the given array to convert it to Max Heap using the provided controls. Array is represented as a Complete Binary Tree(CBT)." />
+<meta property="og:description" content="Objective Apply Heapify Algorithm on the given array to convert it to Max Heap using the provided controls. Array is represented as a Complete Binary Tree(CBT)." />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-06-25T19:56:56+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Heapify Test" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-06-25T19:56:56+05:30","datePublished":"2022-06-25T19:56:56+05:30","description":"Objective Apply Heapify Algorithm on the given array to convert it to Max Heap using the provided controls. Array is represented as a Complete Binary Tree(CBT).","headline":"Heapify Test","mainEntityOfPage":{"@type":"WebPage","@id":"/public/experiments/HeapifyTest.html"},"url":"/public/experiments/HeapifyTest.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-83QNS9V0VK"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-83QNS9V0VK');
+</script>
+</head>
+  <body class="flex flex-col h-screen overflow-hidden">
+    <div class="flex bg-gray-800 text-white text-2xl font-medium py-2 px-3 items-center">
+    <a href="https://www.algodynamics.io">
+        <img src="/public/algodynamics_logo.svg" class="logo w-11 h-11 mr-2" title="Algodynamics Home"></img>
+    </a>
+    Heapify Test
+</div>
+    <div class="flex bg-gray-700 px-2 flex justify-start items-center">
+  <nav class="flex text-gray-200">
+    <a href="/public/index.html" 
+      
+        class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+      >
+        Home
+    </a>
+    
+    
+      
+        <a 
+        
+        href="/public/experiments/BubbleSortTest.html"
+        
+        
+          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+        >
+          Bubble Sort Test
+        </a>
+      
+    
+      
+        <a 
+        
+        href="/public/experiments/HeapifyTest.html"
+        
+        
+          class="py-1 px-2 bg-gray-400 text-black"
+        >
+          Heapify Test
+        </a>
+      
+    
+      
+        <a 
+        
+        href="/public/experiments/HeapSortTest.html"
+        
+        
+          class="py-1 px-2 hover:bg-gray-400 hover:text-gray-800"
+        >
+          Heap Sort Test
+        </a>
+      
+    
+  </nav>
+</div>
+    <div class="flex-grow flex overflow-hidden">
+      <div class="w-1/3 bg-gray-200 p-4 overflow-y-scroll">
+        <div class="my-2 text-gray-700 prose">
+          
+          <h1 id="objective">Objective</h1>
+<p>Apply Heapify Algorithm on the given array to convert it to Max Heap using the provided controls. Array is represented as a Complete Binary Tree(CBT).</p>
+
+<h1 id="variables-description">Variables Description</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Variable</th>
+      <th style="text-align: center">Data Type</th>
+      <th style="text-align: center">Valid values</th>
+      <th style="text-align: center">Initialization</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">i</td>
+      <td style="text-align: center">int</td>
+      <td style="text-align: center">[0,n)</td>
+      <td style="text-align: center">n//2-1(last parent)</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td style="text-align: center">p</td>
+      <td style="text-align: center">int</td>
+      <td style="text-align: center">[0,n)</td>
+      <td style="text-align: center">n//2-1(last parent)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>where n is the length of the array.</p>
+
+<h1 id="controls-description">Controls Description</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Control</th>
+      <th style="text-align: center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Swap And Move (LeftChild)</td>
+      <td style="text-align: center">If left child of node i exists:</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">1. swaps the value of node i and it’s left child.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">2. sets i to point to it’s left child.</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Swap And Move (RightChild)</td>
+      <td style="text-align: center">If right child of node i exists:</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">1. swaps the value of node i and it’s right child.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">2. sets i to point to it’s right child.</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Move (PreviousNode)</td>
+      <td style="text-align: center">If there exists a node before node p in level order traversal of the tree :</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">1. set i to point to the previous node.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">2. set p to point to the previous node.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="procedure">Procedure</h1>
+<ol>
+  <li>Click on suitable control to simulate next step of heapify algorithm.</li>
+  <li>You can do Undo,Redo,Reset by clicking on the respective buttons as per your need.</li>
+  <li>Click on Submit button when you are done.</li>
+</ol>
+
+          
+          
+        </div>
+      </div>
+      <div class="flex-grow flex w-2/3">
+        <div id="elm-app-is-loaded-here"></div>
+      </div>
+    </div>
+    <div id="footer" class="flex bg-gray-500 justify-center">
+    <h3>
+      Copyright © 2020-2022, 
+      <a href="https://www.algodynamics.io" class="text-blue-800">algodynamics.io</a> 
+      
+    </h3> 
+</div>
+    <script type="module">
+      // Create Axios Client
+      const client = axios.create({  baseURL: "https://lepkbux71j.execute-api.ap-south-1.amazonaws.com/Prod",});
+      // console.log(client);
+      // initialise variables
+      let rollNo = null, runId = null, machineId = "HeapifyDT";
+      // Extract and check user ID from params
+      const userId = new URLSearchParams(window.location.search).get('id');
+      if (userId===null){
+        // Redirect to react app if no params
+        window.location.href = "https://algodynamics-iiith.github.io/DT-study-frontend/home";
+      }
+      else {
+        // save params to local storage and verify with backend
+        localStorage.setItem("user_id",userId);
+        let final = "/getAlgorithm/" + userId;
+        await client
+          .get(final)
+          .then((response) => {
+            // Got Roll Number
+            rollNo = response.data.rollno;
+            console.log(rollNo);
+            // Generate a run ID
+            client
+              .post("/createRun", JSON.stringify({ id: userId, machineId: machineId }))
+              .then((response) => {
+                console.log(response.data);
+                runId = response.data.id;
+                console.log(runId);
+                var app = Elm.HeapifyTest.init({
+                  node: document.getElementById("elm-app-is-loaded-here"),
+                });
+                app.ports.analytics.subscribe(function (message) {
+                  message.timestamp = Date.now();
+                  message.id = runId;
+                  console.log(message);
+                  client
+                    .post("/updateRun", JSON.stringify(message))
+                    .then((response) => {
+                      console.log(response.data);
+                    })
+                    .catch((error) => {
+                      window.alert("Error in sending data to backend, contact administrator!");
+                    });
+                    // Detect Submit Message and redirect to Heapsort Test
+                  if(message.type=="ConfirmSubmit"){
+                    setTimeout(()=> {
+                      window.location.href="./HeapSortTest.html?id="+userId;
+                    },2000);
+                  }
+                });
+                
+              })
+              .catch((error) => {
+                // Run ID generation failed
+                console.log(error);
+                window.alert("Error in creating run id, Please contact administrator!");
+              });
+
+
+          })
+          .catch((error) => {
+            // Redirect to react app, as user Id was incorrect or something went wrong
+            console.log(error);
+            window.alert("Error : No Such user ID exists");
+            window.location.href = "https://algodynamics-iiith.github.io/DT-study-frontend/home";       
+          });
+      }
+    </script>
+  </body>
+</html>
