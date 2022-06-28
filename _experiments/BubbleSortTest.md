@@ -10,8 +10,8 @@ order: 0
 # Objective
 Apply Bubble Sort Algorithm on the given array to sort it using the provided controls.
 Please note that:
-1. You don't apply any optimizations over original algorithm.
-2. Sorting of the array is the secondary objective.The primary objective is correct application of bubble sort algorithm.
+1. You should not apply any optimizations over the  original algorithm i.e simulate the bubble sort algorithm to completion.
+2. Sorting of the array is the secondary objective. The primary objective is correct application of bubble sort algorithm.
 
 # Variables Description
 

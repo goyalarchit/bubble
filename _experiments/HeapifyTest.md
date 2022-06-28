@@ -27,12 +27,12 @@ where n is the length of the array.
 | Control                    | Description                                                         |
 | :-------------------------:| :-----------------------------------------------------------------: |
 | Swap And Move (LeftChild)  |  If left child of node i exists:                                    |
-|                            |       1. swaps the value of node i and it's left child.             | 
-|                            |       2. sets i to point to it's left child.                        |
+|                            |       1. swaps the value of node i and its left child.             | 
+|                            |       2. sets i to point to its left child.                        |
 |----------------------------+---------------------------------------------------------------------|
 | Swap And Move (RightChild) |  If right child of node i exists:                                   |
-|                            |       1. swaps the value of node i and it's right child.            | 
-|                            |       2. sets i to point to it's right child.                       |
+|                            |       1. swaps the value of node i and its right child.            | 
+|                            |       2. sets i to point to its right child.                       |
 |----------------------------+---------------------------------------------------------------------|
 | Move (PreviousNode)        |  If there exists a node before node p in level order traversal of the tree :|
 |                            |       1. set i to point to the previous node.                            | 
