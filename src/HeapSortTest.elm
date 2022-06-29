@@ -11,6 +11,7 @@ import Json.Encode as JE
 import List.Extra as LE
 import ListView as LV
 import Random as R
+import Random.List as RL
 import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes as RSDA
@@ -20,6 +21,20 @@ import Utils exposing (..)
 
 
 port analytics : JE.Value -> Cmd msg
+
+
+arrays =
+    [ [ 9, 2, 2, 19, 4, 14, 14 ]
+    , [ 9, 18, 12, 2, 6, 12, 14 ]
+    , [ 4, 4, 16, 16, 7, 16, 17 ]
+    , [ 18, 6, 4, 11, 6, 8, 6 ]
+    , [ 19, 20, 15, 5, 7, 15, 10 ]
+    , [ 10, 19, 7, 3, 10, 20, 13 ]
+    , [ 8, 4, 19, 9, 4, 15, 15 ]
+    , [ 6, 4, 11, 19, 5, 13, 13 ]
+    , [ 4, 15, 18, 15, 20, 8, 16 ]
+    , [ 20, 2, 8, 16, 8, 9, 8 ]
+    ]
 
 
 type alias Model =
@@ -35,6 +50,12 @@ type Msg
     | ResetI
     | SwapIBAndDecrB
     | GotRandom (List Int)
+
+
+initCmd =
+    RL.choose arrays
+        |> R.andThen
+            (\l -> R.constant (Maybe.withDefault [ 20, 5, 16, 2, 11 ] (Tuple.first l)))
 
 
 update : Msg -> State () Model -> State () Model
@@ -242,7 +263,11 @@ view state =
         , HA.style "display" "flex"
         ]
         [ R.draw
-            []
+            [ DA.width 24
+            , DA.height 24
+            , DA.rankSep 30
+            , DA.nodeSep 30
+            ]
             [ R.style " width: 50%; height: 100%"
             , R.nodeDrawer
                 (RSD.svgDrawNode
@@ -361,7 +386,7 @@ btns =
 
 init : () -> ( State () Model, Cmd Msg )
 init _ =
-    ( State () (Model [ 10, 9, 9, 3, 5, 2, 8 ] 0 6), R.generate GotRandom (R.list 7 (R.int 1 10)) )
+    ( State () (Model [ 10, 9, 9, 3, 5, 2, 8 ] 0 6), R.generate GotRandom initCmd )
 
 
 msgType : Msg -> DT.MsgType

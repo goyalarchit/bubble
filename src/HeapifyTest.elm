@@ -11,6 +11,7 @@ import Json.Encode as JE
 import List.Extra as LE
 import ListView as LV
 import Random as R
+import Random.List as RL
 import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes as RSDA
@@ -20,6 +21,26 @@ import Utils exposing (..)
 
 
 port analytics : JE.Value -> Cmd msg
+
+
+arrays =
+    [ [ 4, 15, 14, 1, 13, 8, 5, 17, 2, 15, 6, 3, 12, 4 ]
+    , [ 18, 3, 4, 12, 20, 4, 13, 6, 20, 3, 12, 4, 18 ]
+    , [ 18, 9, 14, 20, 9, 14, 9, 1, 10, 7, 5, 17, 11, 12, 7 ]
+    , [ 1, 14, 7, 10, 2, 6, 16, 18, 17, 3 ]
+    , [ 7, 19, 14, 19, 1, 17, 18, 20, 11, 20, 14, 17, 9 ]
+    , [ 12, 10, 20, 8, 1, 15, 1, 19, 9, 8, 16, 3, 18 ]
+    , [ 15, 16, 18, 10, 12, 5, 5, 16, 20, 17, 14, 2, 2, 8, 3 ]
+    , [ 15, 12, 12, 2, 4, 7, 20, 6, 6, 1, 13, 4, 6, 15 ]
+    , [ 17, 14, 12, 4, 14, 13, 9, 16, 17, 19, 20, 12, 12 ]
+    , [ 12, 11, 3, 2, 12, 9, 6, 20, 6, 4, 4, 11, 15, 3 ]
+    ]
+
+
+initCmd =
+    RL.choose arrays
+        |> R.andThen
+            (\l -> R.constant (Maybe.withDefault [ 12, 11, 3, 2, 12, 9, 6, 20, 6, 4, 4 ] (Tuple.first l)))
 
 
 type alias Model =
@@ -153,7 +174,11 @@ view state =
         , HA.style "display" "flex"
         ]
         [ R.draw
-            []
+            [ DA.width 24
+            , DA.height 24
+            , DA.rankSep 30
+            , DA.nodeSep 30
+            ]
             [ R.style " width: 50%; height: 100%"
             , R.nodeDrawer
                 (RSD.svgDrawNode
@@ -203,6 +228,7 @@ viewList model =
         , R.nodeDrawer
             (RSD.svgDrawNode
                 [ RSDA.label (\x -> String.fromInt x.label)
+                , RSDA.title (\x -> String.fromInt x.label)
                 , RSDA.strokeWidth (changeShape model.i >> T3.second)
                 , RSDA.strokeDashArray (changeShape model.i >> T3.third)
                 , RSDA.xLabels
@@ -286,7 +312,7 @@ btns =
 
 init : () -> ( State () Model, Cmd Msg )
 init _ =
-    ( State () (Model [ 1, 2, 3, 4, 5, 6, 7 ] 0 5), R.generate GotRandom (R.list 7 (R.int 1 10)) )
+    ( State () (Model [ 1, 2, 3, 4, 5, 6, 7 ] 0 5), R.generate GotRandom initCmd )
 
 
 msgType : Msg -> DT.MsgType
