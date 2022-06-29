@@ -5373,139 +5373,42 @@ var $elm$random$Random$generate = F2(
 			$elm$random$Random$Generate(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $elm$core$Bitwise$xor = _Bitwise_xor;
-var $elm$random$Random$peel = function (_v0) {
-	var state = _v0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var $elm$random$Random$int = F2(
-	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _v0.a;
-				var hi = _v0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
-						$elm$random$Random$next(seed0));
-				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = $elm$random$Random$peel(seed);
-							var seedN = $elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
-						}
-					};
-					return accountForBias(seed0);
-				}
-			});
-	});
-var $elm$random$Random$listHelp = F4(
-	function (revList, n, gen, seed) {
-		listHelp:
-		while (true) {
-			if (n < 1) {
-				return _Utils_Tuple2(revList, seed);
-			} else {
-				var _v0 = gen(seed);
-				var value = _v0.a;
-				var newSeed = _v0.b;
-				var $temp$revList = A2($elm$core$List$cons, value, revList),
-					$temp$n = n - 1,
-					$temp$gen = gen,
-					$temp$seed = newSeed;
-				revList = $temp$revList;
-				n = $temp$n;
-				gen = $temp$gen;
-				seed = $temp$seed;
-				continue listHelp;
-			}
-		}
-	});
-var $elm$random$Random$list = F2(
-	function (n, _v0) {
-		var gen = _v0.a;
+var $elm$random$Random$andThen = F2(
+	function (callback, _v0) {
+		var genA = _v0.a;
 		return $elm$random$Random$Generator(
 			function (seed) {
-				return A4($elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+				var _v1 = genA(seed);
+				var result = _v1.a;
+				var newSeed = _v1.b;
+				var _v2 = callback(result);
+				var genB = _v2.a;
+				return genB(newSeed);
 			});
 	});
-var $author$project$HeapifyTest$init = function (_v0) {
-	return _Utils_Tuple2(
-		A2(
-			$author$project$DrivingTest$State,
-			_Utils_Tuple0,
-			A3(
-				$author$project$HeapifyTest$Model,
-				_List_fromArray(
-					[1, 2, 3, 4, 5, 6, 7]),
-				0,
-				5)),
-		A2(
-			$elm$random$Random$generate,
-			$author$project$HeapifyTest$GotRandom,
-			A2(
-				$elm$random$Random$list,
-				7,
-				A2($elm$random$Random$int, 1, 10))));
-};
-var $author$project$Utils$errMessage = function (text) {
-	return 'Error! ' + text;
-};
-var $author$project$Utils$okMessage = function (text) {
-	return 'Control ~' + (text + '~ captured.');
-};
-var $author$project$HeapifyTest$isEnabled = F2(
-	function (msg, state) {
-		var name = $author$project$HeapifyTest$actionToName(msg);
-		var _v0 = state.ts;
-		var i = _v0.i;
-		var p = _v0.p;
-		var cbt = _v0.cbt;
-		var n = $elm$core$List$length(cbt);
-		var leftChild = (2 * i) + 1;
-		var rightChild = (2 * i) + 2;
-		switch (msg.$) {
-			case 'SwapAndMoveLeft':
-				return (_Utils_cmp(leftChild, n) < 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('No left child'));
-			case 'SwapAndMoveRight':
-				return (_Utils_cmp(rightChild, n) < 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('No right child'));
-			case 'ChangeParentAndReset':
-				return (p > 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('No previous node'));
-			default:
-				return $elm$core$Result$Ok('You can now begin the test.');
-		}
-	});
-var $author$project$DrivingTest$TSMsg = {$: 'TSMsg'};
-var $author$project$DrivingTest$UIMsg = {$: 'UIMsg'};
-var $author$project$HeapifyTest$msgType = function (msg) {
-	if (msg.$ === 'GotRandom') {
-		return $author$project$DrivingTest$UIMsg;
-	} else {
-		return $author$project$DrivingTest$TSMsg;
-	}
-};
+var $author$project$HeapifyTest$arrays = _List_fromArray(
+	[
+		_List_fromArray(
+		[4, 15, 14, 1, 13, 8, 5, 17, 2, 15, 6, 3, 12, 4]),
+		_List_fromArray(
+		[18, 3, 4, 12, 20, 4, 13, 6, 20, 3, 12, 4, 18]),
+		_List_fromArray(
+		[18, 9, 14, 20, 9, 14, 9, 1, 10, 7, 5, 17, 11, 12, 7]),
+		_List_fromArray(
+		[1, 14, 7, 10, 2, 6, 16, 18, 17, 3]),
+		_List_fromArray(
+		[7, 19, 14, 19, 1, 17, 18, 20, 11, 20, 14, 17, 9]),
+		_List_fromArray(
+		[12, 10, 20, 8, 1, 15, 1, 19, 9, 8, 16, 3, 18]),
+		_List_fromArray(
+		[15, 16, 18, 10, 12, 5, 5, 16, 20, 17, 14, 2, 2, 8, 3]),
+		_List_fromArray(
+		[15, 12, 12, 2, 4, 7, 20, 6, 6, 1, 13, 4, 6, 15]),
+		_List_fromArray(
+		[17, 14, 12, 4, 14, 13, 9, 16, 17, 19, 20, 12, 12]),
+		_List_fromArray(
+		[12, 11, 3, 2, 12, 9, 6, 20, 6, 4, 4, 11, 15, 3])
+	]);
 var $elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5561,17 +5464,20 @@ var $elm$core$List$foldr = F3(
 	function (fn, acc, ls) {
 		return A4($elm$core$List$foldrHelper, fn, acc, 0, ls);
 	});
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
 	});
+var $elm$random$Random$constant = function (value) {
+	return $elm$random$Random$Generator(
+		function (seed) {
+			return _Utils_Tuple2(value, seed);
+		});
+};
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -5602,6 +5508,298 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
+var $elm_community$random_extra$Random$List$get = F2(
+	function (index, list) {
+		return $elm$core$List$head(
+			A2($elm$core$List$drop, index, list));
+	});
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $elm$random$Random$peel = function (_v0) {
+	var state = _v0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var $elm$random$Random$int = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _v0.a;
+				var hi = _v0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
+						$elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = $elm$random$Random$peel(seed);
+							var seedN = $elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
+var $elm_community$random_extra$Random$List$choose = function (list) {
+	if ($elm$core$List$isEmpty(list)) {
+		return $elm$random$Random$constant(
+			_Utils_Tuple2($elm$core$Maybe$Nothing, list));
+	} else {
+		var lastIndex = $elm$core$List$length(list) - 1;
+		var gen = A2($elm$random$Random$int, 0, lastIndex);
+		var front = function (i) {
+			return A2($elm$core$List$take, i, list);
+		};
+		var back = function (i) {
+			return A2($elm$core$List$drop, i + 1, list);
+		};
+		return A2(
+			$elm$random$Random$map,
+			function (index) {
+				return _Utils_Tuple2(
+					A2($elm_community$random_extra$Random$List$get, index, list),
+					A2(
+						$elm$core$List$append,
+						front(index),
+						back(index)));
+			},
+			gen);
+	}
+};
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var $author$project$HeapifyTest$initCmd = A2(
+	$elm$random$Random$andThen,
+	function (l) {
+		return $elm$random$Random$constant(
+			A2(
+				$elm$core$Maybe$withDefault,
+				_List_fromArray(
+					[12, 11, 3, 2, 12, 9, 6, 20, 6, 4, 4]),
+				l.a));
+	},
+	$elm_community$random_extra$Random$List$choose($author$project$HeapifyTest$arrays));
+var $author$project$HeapifyTest$init = function (_v0) {
+	return _Utils_Tuple2(
+		A2(
+			$author$project$DrivingTest$State,
+			_Utils_Tuple0,
+			A3(
+				$author$project$HeapifyTest$Model,
+				_List_fromArray(
+					[1, 2, 3, 4, 5, 6, 7]),
+				0,
+				5)),
+		A2($elm$random$Random$generate, $author$project$HeapifyTest$GotRandom, $author$project$HeapifyTest$initCmd));
+};
+var $author$project$Utils$errMessage = function (text) {
+	return 'Error! ' + text;
+};
+var $author$project$Utils$okMessage = function (text) {
+	return 'Control ~' + (text + '~ captured.');
+};
+var $author$project$HeapifyTest$isEnabled = F2(
+	function (msg, state) {
+		var name = $author$project$HeapifyTest$actionToName(msg);
+		var _v0 = state.ts;
+		var i = _v0.i;
+		var p = _v0.p;
+		var cbt = _v0.cbt;
+		var n = $elm$core$List$length(cbt);
+		var leftChild = (2 * i) + 1;
+		var rightChild = (2 * i) + 2;
+		switch (msg.$) {
+			case 'SwapAndMoveLeft':
+				return (_Utils_cmp(leftChild, n) < 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('No left child'));
+			case 'SwapAndMoveRight':
+				return (_Utils_cmp(rightChild, n) < 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('No right child'));
+			case 'ChangeParentAndReset':
+				return (p > 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('No previous node'));
+			default:
+				return $elm$core$Result$Ok('You can now begin the test.');
+		}
+	});
+var $author$project$DrivingTest$TSMsg = {$: 'TSMsg'};
+var $author$project$DrivingTest$UIMsg = {$: 'UIMsg'};
+var $author$project$HeapifyTest$msgType = function (msg) {
+	if (msg.$ === 'GotRandom') {
+		return $author$project$DrivingTest$UIMsg;
+	} else {
+		return $author$project$DrivingTest$TSMsg;
+	}
+};
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
 var $elm_community$list_extra$List$Extra$getAt = F2(
 	function (idx, xs) {
 		return (idx < 0) ? $elm$core$Maybe$Nothing : $elm$core$List$head(
@@ -5989,14 +6187,6 @@ var $author$project$DrivingTest$Scored = function (a) {
 	return {$: 'Scored', a: a};
 };
 var $author$project$DrivingTest$WaitingConfirmation = {$: 'WaitingConfirmation'};
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
 var $elm_community$undo_redo$UndoList$forget = function (_v0) {
 	var present = _v0.present;
 	var future = _v0.future;
@@ -6128,15 +6318,6 @@ var $author$project$EditDistance$textLoop = F4(
 				col = $temp$col;
 				continue textLoop;
 			}
-		}
-	});
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
 		}
 	});
 var $author$project$EditDistance$levenshtein = F2(
@@ -8411,13 +8592,6 @@ var $elm$core$List$all = F2(
 			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
 			list);
 	});
-var $elm$core$List$isEmpty = function (xs) {
-	if (!xs.b) {
-		return true;
-	} else {
-		return false;
-	}
-};
 var $ThinkAlexandria$css_in_elm$Css$Structure$dropEmptyDeclarations = function (declarations) {
 	dropEmptyDeclarations:
 	while (true) {
@@ -11814,132 +11988,6 @@ var $author$project$DrivingTest$sandbox = function (impl) {
 			view: A2($author$project$DrivingTest$view, impl.btns, impl.view)
 		});
 };
-var $elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2($elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var $elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return $elm$core$List$reverse(
-			A3($elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var $elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _v0 = _Utils_Tuple2(n, list);
-			_v0$1:
-			while (true) {
-				_v0$5:
-				while (true) {
-					if (!_v0.b.b) {
-						return list;
-					} else {
-						if (_v0.b.b.b) {
-							switch (_v0.a) {
-								case 1:
-									break _v0$1;
-								case 2:
-									var _v2 = _v0.b;
-									var x = _v2.a;
-									var _v3 = _v2.b;
-									var y = _v3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_v0.b.b.b.b) {
-										var _v4 = _v0.b;
-										var x = _v4.a;
-										var _v5 = _v4.b;
-										var y = _v5.a;
-										var _v6 = _v5.b;
-										var z = _v6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _v0$5;
-									}
-								default:
-									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
-										var _v7 = _v0.b;
-										var x = _v7.a;
-										var _v8 = _v7.b;
-										var y = _v8.a;
-										var _v9 = _v8.b;
-										var z = _v9.a;
-										var _v10 = _v9.b;
-										var w = _v10.a;
-										var tl = _v10.b;
-										return (ctr > 1000) ? A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _v0$5;
-									}
-							}
-						} else {
-							if (_v0.a === 1) {
-								break _v0$1;
-							} else {
-								break _v0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _v1 = _v0.b;
-			var x = _v1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var $elm$core$List$take = F2(
-	function (n, list) {
-		return A3($elm$core$List$takeFast, 0, n, list);
-	});
 var $elm_community$list_extra$List$Extra$splitAt = F2(
 	function (n, xs) {
 		return _Utils_Tuple2(
@@ -20078,6 +20126,15 @@ var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$fontSize = function
 			{fontSize: f});
 	};
 };
+var $goyalarchit$elm_dagre$Dagre$Attributes$height = function (h) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				height: $elm$core$Basics$abs(h)
+			});
+	};
+};
 var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$label = function (f) {
 	return function (edc) {
 		return _Utils_update(
@@ -20090,6 +20147,24 @@ var $goyalarchit$elm_dagre$Render$nodeDrawer = function (f) {
 		return _Utils_update(
 			dc,
 			{nodeDrawer: f});
+	};
+};
+var $goyalarchit$elm_dagre$Dagre$Attributes$nodeSep = function (nSep) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				nodeSep: $elm$core$Basics$abs(nSep)
+			});
+	};
+};
+var $goyalarchit$elm_dagre$Dagre$Attributes$rankSep = function (rSep) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				rankSep: $elm$core$Basics$abs(rSep)
+			});
 	};
 };
 var $TSFoster$elm_tuple_extra$Tuple3$second = function (_v0) {
@@ -20267,15 +20342,6 @@ var $goyalarchit$elm_dagre$Dagre$Attributes$rankDir = function (rDir) {
 			{rankDir: rDir});
 	};
 };
-var $goyalarchit$elm_dagre$Dagre$Attributes$rankSep = function (rSep) {
-	return function (a) {
-		return _Utils_update(
-			a,
-			{
-				rankSep: $elm$core$Basics$abs(rSep)
-			});
-	};
-};
 var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$shape = function (f) {
 	return function (ndc) {
 		return _Utils_update(
@@ -20344,6 +20410,10 @@ var $author$project$HeapifyTest$viewList = function (model) {
 					_List_fromArray(
 						[
 							$goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$label(
+							function (x) {
+								return $elm$core$String$fromInt(x.label);
+							}),
+							$goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$title(
 							function (x) {
 								return $elm$core$String$fromInt(x.label);
 							}),
@@ -20439,6 +20509,15 @@ var $author$project$ListView$viewVars = function (vars) {
 			},
 			vars));
 };
+var $goyalarchit$elm_dagre$Dagre$Attributes$width = function (w) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				width: $elm$core$Basics$abs(w)
+			});
+	};
+};
 var $author$project$HeapifyTest$xlbl = F2(
 	function (model, n) {
 		return (_Utils_eq(n.id, model.i) && _Utils_eq(n.id, model.p)) ? _Utils_Tuple3('i,p', '4 4', 2) : (_Utils_eq(n.id, model.i) ? _Utils_Tuple3('i', '4 4', 2) : (_Utils_eq(n.id, model.p) ? _Utils_Tuple3('p', '4 4', 2) : _Utils_Tuple3('', '', 1)));
@@ -20460,7 +20539,13 @@ var $author$project$HeapifyTest$view = function (state) {
 			[
 				A3(
 				$goyalarchit$elm_dagre$Render$draw,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$goyalarchit$elm_dagre$Dagre$Attributes$width(24),
+						$goyalarchit$elm_dagre$Dagre$Attributes$height(24),
+						$goyalarchit$elm_dagre$Dagre$Attributes$rankSep(30),
+						$goyalarchit$elm_dagre$Dagre$Attributes$nodeSep(30)
+					]),
 				_List_fromArray(
 					[
 						$goyalarchit$elm_dagre$Render$style(' width: 50%; height: 100%'),
