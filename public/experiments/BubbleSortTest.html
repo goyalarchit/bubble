@@ -193,6 +193,12 @@
                   .catch((error) => {
                     window.alert("Error in sending data to backend, contact administrator!");
                   });
+                // Detect Submit Message and redirect to Heapsort Test
+                if (message.type == "ConfirmSubmit") {
+                  let final = "/getAlgorithm/" + userId;
+                  client.get("/complete/" + userId);
+                  window.alert("Thank You For Participation.");
+                }
               });
 
             })

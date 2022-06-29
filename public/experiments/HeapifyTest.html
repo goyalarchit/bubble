@@ -214,6 +214,7 @@
                   });
                 // Detect Submit Message and redirect to Heapsort Test
                 if (message.type == "ConfirmSubmit") {
+                  window.alert("Redirecting");
                   setTimeout(() => {
                     window.location.href = "./HeapSortTest.html?id=" + userId;
                   }, 2000);
