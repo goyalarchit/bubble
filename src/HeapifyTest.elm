@@ -369,11 +369,21 @@ isEnabled msg state =
             Ok "You can now begin the test."
 
 
+gradeRubric =
+    DT.GradeRubric (\n -> HeapUtils.isHeap n.ts.cbt ) allMsgs actionToName
+
+allMsgs =
+    [ SwapAndMoveLeft
+    , SwapAndMoveRight
+    , ChangeParentAndReset
+    ] |> List.map actionToName
+
 main =
     DT.sandbox
         { init = init
         , view = view
         , btns = btns
+        , gradeRubric = gradeRubric
         , update = update
         , isEnabled = isEnabled
         , next = next

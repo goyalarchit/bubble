@@ -5259,6 +5259,97 @@ var $author$project$HeapSortTest$btns = _List_fromArray(
 		$author$project$HeapSortTest$actionToName($author$project$HeapSortTest$ResetI),
 		$author$project$HeapSortTest$ResetI)
 	]);
+var $author$project$DrivingTest$GradeRubric = F3(
+	function (objective, allMsg, msgToString) {
+		return {allMsg: allMsg, msgToString: msgToString, objective: objective};
+	});
+var $elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							$elm$core$List$foldl,
+							fn,
+							acc,
+							$elm$core$List$reverse(r4)) : A4($elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var $elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4($elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var $elm$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return A2(
+						$elm$core$List$cons,
+						f(x),
+						acc);
+				}),
+			_List_Nil,
+			xs);
+	});
+var $author$project$HeapSortTest$allMsgs = A2(
+	$elm$core$List$map,
+	$author$project$HeapSortTest$actionToName,
+	_List_fromArray(
+		[$author$project$HeapSortTest$SwapAndMoveLeft, $author$project$HeapSortTest$SwapAndMoveRight, $author$project$HeapSortTest$ResetI, $author$project$HeapSortTest$SwapIBAndDecrB]));
+var $elm$core$List$sortBy = _List_sortBy;
+var $elm$core$List$sort = function (xs) {
+	return A2($elm$core$List$sortBy, $elm$core$Basics$identity, xs);
+};
+var $author$project$HeapSortTest$gradeRubric = A3(
+	$author$project$DrivingTest$GradeRubric,
+	function (n) {
+		return _Utils_eq(
+			$elm$core$List$sort(n.ts.cbt),
+			n.ts.cbt);
+	},
+	$author$project$HeapSortTest$allMsgs,
+	$author$project$HeapSortTest$actionToName);
 var $author$project$HeapSortTest$GotRandom = function (a) {
 	return {$: 'GotRandom', a: a};
 };
@@ -5380,6 +5471,91 @@ var $elm$random$Random$generate = F2(
 			$elm$random$Random$Generate(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
+var $elm$random$Random$andThen = F2(
+	function (callback, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed) {
+				var _v1 = genA(seed);
+				var result = _v1.a;
+				var newSeed = _v1.b;
+				var _v2 = callback(result);
+				var genB = _v2.a;
+				return genB(newSeed);
+			});
+	});
+var $author$project$HeapSortTest$arrays = _List_fromArray(
+	[
+		_List_fromArray(
+		[9, 2, 2, 19, 4, 14, 14]),
+		_List_fromArray(
+		[9, 18, 12, 2, 6, 12, 14]),
+		_List_fromArray(
+		[4, 4, 16, 16, 7, 16, 17]),
+		_List_fromArray(
+		[18, 6, 4, 11, 6, 8, 6]),
+		_List_fromArray(
+		[19, 20, 15, 5, 7, 15, 10]),
+		_List_fromArray(
+		[10, 19, 7, 3, 10, 20, 13]),
+		_List_fromArray(
+		[8, 4, 19, 9, 4, 15, 15]),
+		_List_fromArray(
+		[6, 4, 11, 19, 5, 13, 13]),
+		_List_fromArray(
+		[4, 15, 18, 15, 20, 8, 16]),
+		_List_fromArray(
+		[20, 2, 8, 16, 8, 9, 8])
+	]);
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$random$Random$constant = function (value) {
+	return $elm$random$Random$Generator(
+		function (seed) {
+			return _Utils_Tuple2(value, seed);
+		});
+};
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $elm_community$random_extra$Random$List$get = F2(
+	function (index, list) {
+		return $elm$core$List$head(
+			A2($elm$core$List$drop, index, list));
+	});
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Basics$negate = function (n) {
 	return -n;
@@ -5422,288 +5598,12 @@ var $elm$random$Random$int = F2(
 				}
 			});
 	});
-var $elm$random$Random$listHelp = F4(
-	function (revList, n, gen, seed) {
-		listHelp:
-		while (true) {
-			if (n < 1) {
-				return _Utils_Tuple2(revList, seed);
-			} else {
-				var _v0 = gen(seed);
-				var value = _v0.a;
-				var newSeed = _v0.b;
-				var $temp$revList = A2($elm$core$List$cons, value, revList),
-					$temp$n = n - 1,
-					$temp$gen = gen,
-					$temp$seed = newSeed;
-				revList = $temp$revList;
-				n = $temp$n;
-				gen = $temp$gen;
-				seed = $temp$seed;
-				continue listHelp;
-			}
-		}
-	});
-var $elm$random$Random$list = F2(
-	function (n, _v0) {
-		var gen = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed) {
-				return A4($elm$random$Random$listHelp, _List_Nil, n, gen, seed);
-			});
-	});
-var $author$project$HeapSortTest$init = function (_v0) {
-	return _Utils_Tuple2(
-		A2(
-			$author$project$DrivingTest$State,
-			_Utils_Tuple0,
-			A3(
-				$author$project$HeapSortTest$Model,
-				_List_fromArray(
-					[10, 9, 9, 3, 5, 2, 8]),
-				0,
-				6)),
-		A2(
-			$elm$random$Random$generate,
-			$author$project$HeapSortTest$GotRandom,
-			A2(
-				$elm$random$Random$list,
-				7,
-				A2($elm$random$Random$int, 1, 10))));
-};
-var $author$project$Utils$errMessage = function (text) {
-	return 'Error! ' + text;
-};
-var $author$project$Utils$okMessage = function (text) {
-	return 'Control ~' + (text + '~ captured.');
-};
-var $author$project$HeapSortTest$isEnabled = F2(
-	function (msg, state) {
-		var name = $author$project$HeapSortTest$actionToName(msg);
-		var _v0 = state.ts;
-		var i = _v0.i;
-		var b = _v0.b;
-		var cbt = _v0.cbt;
-		var n = $elm$core$List$length(cbt);
-		var leftChild = (2 * i) + 1;
-		var rightChild = (2 * i) + 2;
-		switch (msg.$) {
-			case 'SwapAndMoveLeft':
-				return (_Utils_cmp(leftChild, n) < 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('No left child'));
-			case 'SwapAndMoveRight':
-				return (_Utils_cmp(rightChild, n) < 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('No right child'));
-			case 'SwapIBAndDecrB':
-				return (b > 0) ? $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
-					$author$project$Utils$errMessage('Cannot decrement boundary'));
-			case 'ResetI':
-				return $elm$core$Result$Ok(
-					$author$project$Utils$okMessage(name));
-			default:
-				return $elm$core$Result$Ok('You can now begin the test.');
-		}
-	});
-var $author$project$DrivingTest$TSMsg = {$: 'TSMsg'};
-var $author$project$DrivingTest$UIMsg = {$: 'UIMsg'};
-var $author$project$HeapSortTest$msgType = function (msg) {
-	if (msg.$ === 'GotRandom') {
-		return $author$project$DrivingTest$UIMsg;
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
 	} else {
-		return $author$project$DrivingTest$TSMsg;
+		return false;
 	}
-};
-var $elm$core$List$foldrHelper = F4(
-	function (fn, acc, ctr, ls) {
-		if (!ls.b) {
-			return acc;
-		} else {
-			var a = ls.a;
-			var r1 = ls.b;
-			if (!r1.b) {
-				return A2(fn, a, acc);
-			} else {
-				var b = r1.a;
-				var r2 = r1.b;
-				if (!r2.b) {
-					return A2(
-						fn,
-						a,
-						A2(fn, b, acc));
-				} else {
-					var c = r2.a;
-					var r3 = r2.b;
-					if (!r3.b) {
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(fn, c, acc)));
-					} else {
-						var d = r3.a;
-						var r4 = r3.b;
-						var res = (ctr > 500) ? A3(
-							$elm$core$List$foldl,
-							fn,
-							acc,
-							$elm$core$List$reverse(r4)) : A4($elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(
-									fn,
-									c,
-									A2(fn, d, res))));
-					}
-				}
-			}
-		}
-	});
-var $elm$core$List$foldr = F3(
-	function (fn, acc, ls) {
-		return A4($elm$core$List$foldrHelper, fn, acc, 0, ls);
-	});
-var $elm$core$Basics$ge = _Utils_ge;
-var $elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
-			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
-			}
-		}
-	});
-var $elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return $elm$core$Maybe$Just(x);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $elm_community$list_extra$List$Extra$getAt = F2(
-	function (idx, xs) {
-		return (idx < 0) ? $elm$core$Maybe$Nothing : $elm$core$List$head(
-			A2($elm$core$List$drop, idx, xs));
-	});
-var $author$project$HeapUtils$getForList = F2(
-	function (lst, i) {
-		var _v0 = A2($elm_community$list_extra$List$Extra$getAt, i, lst);
-		if (_v0.$ === 'Just') {
-			var x = _v0.a;
-			return x;
-		} else {
-			return -1;
-		}
-	});
-var $elm$core$List$map = F2(
-	function (f, xs) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, acc) {
-					return A2(
-						$elm$core$List$cons,
-						f(x),
-						acc);
-				}),
-			_List_Nil,
-			xs);
-	});
-var $elm_community$list_extra$List$Extra$maximumBy = F2(
-	function (f, ls) {
-		var maxBy = F2(
-			function (x, _v1) {
-				var y = _v1.a;
-				var fy = _v1.b;
-				var fx = f(x);
-				return (_Utils_cmp(fx, fy) > 0) ? _Utils_Tuple2(x, fx) : _Utils_Tuple2(y, fy);
-			});
-		if (ls.b) {
-			if (!ls.b.b) {
-				var l_ = ls.a;
-				return $elm$core$Maybe$Just(l_);
-			} else {
-				var l_ = ls.a;
-				var ls_ = ls.b;
-				return $elm$core$Maybe$Just(
-					A3(
-						$elm$core$List$foldl,
-						maxBy,
-						_Utils_Tuple2(
-							l_,
-							f(l_)),
-						ls_).a);
-			}
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $elm$core$Tuple$second = function (_v0) {
-	var y = _v0.b;
-	return y;
-};
-var $author$project$HeapUtils$largest = F2(
-	function (i, cbt) {
-		var indices = _List_fromArray(
-			[i, (2 * i) + 1, (2 * i) + 2]);
-		var values = A2(
-			$elm$core$List$map,
-			function (x) {
-				return A2($author$project$HeapUtils$getForList, cbt, x);
-			},
-			indices);
-		var _v0 = A2(
-			$elm_community$list_extra$List$Extra$maximumBy,
-			$elm$core$Tuple$second,
-			A2(
-				$elm$core$List$indexedMap,
-				F2(
-					function (t, a) {
-						return _Utils_Tuple2(t, a);
-					}),
-				values));
-		if (_v0.$ === 'Just') {
-			var _v1 = _v0.a;
-			var idx = _v1.a;
-			var a = _v1.b;
-			return A2($author$project$HeapUtils$getForList, indices, idx);
-		} else {
-			return -1;
-		}
-	});
-var $elm$core$Basics$neq = _Utils_notEqual;
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $elm$core$List$concat = function (lists) {
-	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
 var $elm$core$List$takeReverse = F3(
 	function (n, list, kept) {
@@ -5831,6 +5731,192 @@ var $elm$core$List$take = F2(
 	function (n, list) {
 		return A3($elm$core$List$takeFast, 0, n, list);
 	});
+var $elm_community$random_extra$Random$List$choose = function (list) {
+	if ($elm$core$List$isEmpty(list)) {
+		return $elm$random$Random$constant(
+			_Utils_Tuple2($elm$core$Maybe$Nothing, list));
+	} else {
+		var lastIndex = $elm$core$List$length(list) - 1;
+		var gen = A2($elm$random$Random$int, 0, lastIndex);
+		var front = function (i) {
+			return A2($elm$core$List$take, i, list);
+		};
+		var back = function (i) {
+			return A2($elm$core$List$drop, i + 1, list);
+		};
+		return A2(
+			$elm$random$Random$map,
+			function (index) {
+				return _Utils_Tuple2(
+					A2($elm_community$random_extra$Random$List$get, index, list),
+					A2(
+						$elm$core$List$append,
+						front(index),
+						back(index)));
+			},
+			gen);
+	}
+};
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var $author$project$HeapSortTest$initCmd = A2(
+	$elm$random$Random$andThen,
+	function (l) {
+		return $elm$random$Random$constant(
+			A2(
+				$elm$core$Maybe$withDefault,
+				_List_fromArray(
+					[20, 5, 16, 2, 11]),
+				l.a));
+	},
+	$elm_community$random_extra$Random$List$choose($author$project$HeapSortTest$arrays));
+var $author$project$HeapSortTest$init = function (_v0) {
+	return _Utils_Tuple2(
+		A2(
+			$author$project$DrivingTest$State,
+			_Utils_Tuple0,
+			A3(
+				$author$project$HeapSortTest$Model,
+				_List_fromArray(
+					[10, 9, 9, 3, 5, 2, 8]),
+				0,
+				6)),
+		A2($elm$random$Random$generate, $author$project$HeapSortTest$GotRandom, $author$project$HeapSortTest$initCmd));
+};
+var $author$project$Utils$errMessage = function (text) {
+	return 'Error! ' + text;
+};
+var $author$project$Utils$okMessage = function (text) {
+	return 'Control ~' + (text + '~ captured.');
+};
+var $author$project$HeapSortTest$isEnabled = F2(
+	function (msg, state) {
+		var name = $author$project$HeapSortTest$actionToName(msg);
+		var _v0 = state.ts;
+		var i = _v0.i;
+		var b = _v0.b;
+		var cbt = _v0.cbt;
+		var n = $elm$core$List$length(cbt);
+		var leftChild = (2 * i) + 1;
+		var rightChild = (2 * i) + 2;
+		switch (msg.$) {
+			case 'SwapAndMoveLeft':
+				return (_Utils_cmp(leftChild, n) < 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('No left child'));
+			case 'SwapAndMoveRight':
+				return (_Utils_cmp(rightChild, n) < 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('No right child'));
+			case 'SwapIBAndDecrB':
+				return (b > 0) ? $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name)) : $elm$core$Result$Err(
+					$author$project$Utils$errMessage('Cannot decrement boundary'));
+			case 'ResetI':
+				return $elm$core$Result$Ok(
+					$author$project$Utils$okMessage(name));
+			default:
+				return $elm$core$Result$Ok('You can now begin the test.');
+		}
+	});
+var $author$project$DrivingTest$TSMsg = {$: 'TSMsg'};
+var $author$project$DrivingTest$UIMsg = {$: 'UIMsg'};
+var $author$project$HeapSortTest$msgType = function (msg) {
+	if (msg.$ === 'GotRandom') {
+		return $author$project$DrivingTest$UIMsg;
+	} else {
+		return $author$project$DrivingTest$TSMsg;
+	}
+};
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm_community$list_extra$List$Extra$getAt = F2(
+	function (idx, xs) {
+		return (idx < 0) ? $elm$core$Maybe$Nothing : $elm$core$List$head(
+			A2($elm$core$List$drop, idx, xs));
+	});
+var $author$project$HeapUtils$getForList = F2(
+	function (lst, i) {
+		var _v0 = A2($elm_community$list_extra$List$Extra$getAt, i, lst);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return x;
+		} else {
+			return -1;
+		}
+	});
+var $elm_community$list_extra$List$Extra$maximumBy = F2(
+	function (f, ls) {
+		var maxBy = F2(
+			function (x, _v1) {
+				var y = _v1.a;
+				var fy = _v1.b;
+				var fx = f(x);
+				return (_Utils_cmp(fx, fy) > 0) ? _Utils_Tuple2(x, fx) : _Utils_Tuple2(y, fy);
+			});
+		if (ls.b) {
+			if (!ls.b.b) {
+				var l_ = ls.a;
+				return $elm$core$Maybe$Just(l_);
+			} else {
+				var l_ = ls.a;
+				var ls_ = ls.b;
+				return $elm$core$Maybe$Just(
+					A3(
+						$elm$core$List$foldl,
+						maxBy,
+						_Utils_Tuple2(
+							l_,
+							f(l_)),
+						ls_).a);
+			}
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $author$project$HeapUtils$largest = F2(
+	function (i, cbt) {
+		var indices = _List_fromArray(
+			[i, (2 * i) + 1, (2 * i) + 2]);
+		var values = A2(
+			$elm$core$List$map,
+			function (x) {
+				return A2($author$project$HeapUtils$getForList, cbt, x);
+			},
+			indices);
+		var _v0 = A2(
+			$elm_community$list_extra$List$Extra$maximumBy,
+			$elm$core$Tuple$second,
+			A2(
+				$elm$core$List$indexedMap,
+				F2(
+					function (t, a) {
+						return _Utils_Tuple2(t, a);
+					}),
+				values));
+		if (_v0.$ === 'Just') {
+			var _v1 = _v0.a;
+			var idx = _v1.a;
+			var a = _v1.b;
+			return A2($author$project$HeapUtils$getForList, indices, idx);
+		} else {
+			return -1;
+		}
+	});
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
 var $elm_community$list_extra$List$Extra$splitAt = F2(
 	function (n, xs) {
 		return _Utils_Tuple2(
@@ -6291,6 +6377,10 @@ var $author$project$DrivingTest$New = function (a) {
 };
 var $author$project$Core$Prompt$PromptDanger = {$: 'PromptDanger'};
 var $author$project$Core$Prompt$PromptSuccess = {$: 'PromptSuccess'};
+var $author$project$Grader$Run = F3(
+	function (initState, correct, user) {
+		return {correct: correct, initState: initState, user: user};
+	});
 var $author$project$DrivingTest$Scored = function (a) {
 	return {$: 'Scored', a: a};
 };
@@ -6341,188 +6431,308 @@ var $author$project$DrivingTest$generateCorrectRuns = F4(
 					ms));
 		}
 	});
-var $author$project$EditDistance$last = function (list) {
-	last:
-	while (true) {
-		if (list.b) {
-			if (!list.b.b) {
-				var value = list.a;
-				return $elm$core$Maybe$Just(value);
-			} else {
-				var tail = list.b;
-				var $temp$list = tail;
-				list = $temp$list;
-				continue last;
-			}
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
+var $author$project$Grader$A = {$: 'A'};
+var $author$project$Grader$C = {$: 'C'};
+var $author$project$Grader$D = {$: 'D'};
+var $author$project$Grader$F = {$: 'F'};
+var $elm$core$Dict$values = function (dict) {
+	return A3(
+		$elm$core$Dict$foldr,
+		F3(
+			function (key, value, valueList) {
+				return A2($elm$core$List$cons, value, valueList);
+			}),
+		_List_Nil,
+		dict);
+};
+var $author$project$Grader$actionsInfo = function (table) {
+	var vals = A2(
+		$elm$core$List$filter,
+		function (_v1) {
+			var c = _v1.a;
+			var i = _v1.b;
+			var e = _v1.c;
+			return !_Utils_eq(
+				_Utils_Tuple3(c, i, e),
+				_Utils_Tuple3(0, 0, 0));
+		},
+		$elm$core$Dict$values(table));
+	var following = A2(
+		$elm$core$List$filter,
+		function (_v0) {
+			var c = _v0.a;
+			var i = _v0.b;
+			var e = _v0.c;
+			return (_Utils_cmp(c, i + e) > 0) ? true : false;
+		},
+		vals);
+	return $elm$core$List$isEmpty(vals) ? 0 : ($elm$core$List$length(following) / $elm$core$List$length(vals));
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
+var $elm$core$List$minimum = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(
+			A3($elm$core$List$foldl, $elm$core$Basics$min, x, xs));
+	} else {
+		return $elm$core$Maybe$Nothing;
 	}
 };
-var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var $author$project$EditDistance$min3 = F3(
-	function (a, b, c) {
-		var diff1 = a - b;
-		var minAB = b + (diff1 & (diff1 >> 31));
-		var diff2 = minAB - c;
-		return c + (diff2 & (diff2 >> 31));
+var $author$project$Grader$delta = F2(
+	function (correct, user) {
+		var ds = A2(
+			$elm$core$List$map,
+			function (c) {
+				return _Utils_Tuple2(
+					$elm$core$Basics$abs(
+						$elm$core$List$length(user) - $elm$core$List$length(c)),
+					$elm$core$List$length(c));
+			},
+			correct);
+		var _v0 = A2(
+			$elm$core$Maybe$withDefault,
+			_Utils_Tuple2(0, 0),
+			$elm$core$List$minimum(ds));
+		var minD = _v0.a;
+		var correctLength = _v0.b;
+		return (minD / correctLength) * 100;
 	});
-var $author$project$EditDistance$patternLoop = F6(
-	function (textHead, pattern, b0, b1, b2, prev) {
-		if (pattern.b) {
-			var patternHead = pattern.a;
-			var patternTail = pattern.b;
-			if (prev.b) {
-				var prevHead = prev.a;
-				var prevTail = prev.b;
-				var b2_ = _Utils_eq(textHead, patternHead) ? b0 : (1 + A3($author$project$EditDistance$min3, b0, b1, b2));
-				var b1_ = prevHead;
-				var b0_ = b1;
-				return A2(
-					$elm$core$List$cons,
-					b2_,
-					A6($author$project$EditDistance$patternLoop, textHead, patternTail, b0_, b1_, b2_, prevTail));
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
 			} else {
-				return _Utils_eq(textHead, patternHead) ? _List_fromArray(
-					[b0]) : _List_fromArray(
-					[
-						1 + A3($author$project$EditDistance$min3, b0, b1, b2)
-					]);
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
 			}
 		} else {
-			return _List_Nil;
-		}
-	});
-var $author$project$EditDistance$initPatternLoop = F4(
-	function (textHead, pattern, b0, prevCol) {
-		if (prevCol.b) {
-			var prevHead = prevCol.a;
-			var prevTail = prevCol.b;
-			return A6($author$project$EditDistance$patternLoop, textHead, pattern, b0, prevHead, b0 + 1, prevTail);
-		} else {
-			return _List_Nil;
-		}
-	});
-var $author$project$EditDistance$textLoop = F4(
-	function (text, pattern, idx, col) {
-		textLoop:
-		while (true) {
-			if (!text.b) {
-				return col;
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
 			} else {
-				var textHead = text.a;
-				var textTail = text.b;
-				var nextCol = A4($author$project$EditDistance$initPatternLoop, textHead, pattern, idx - 1, col);
-				var $temp$text = textTail,
-					$temp$pattern = pattern,
-					$temp$idx = idx + 1,
-					$temp$col = nextCol;
-				text = $temp$text;
-				pattern = $temp$pattern;
-				idx = $temp$idx;
-				col = $temp$col;
-				continue textLoop;
-			}
-		}
-	});
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
-var $author$project$EditDistance$levenshtein = F2(
-	function (text, pattern) {
-		levenshtein:
-		while (true) {
-			var _v0 = _Utils_Tuple2(text, pattern);
-			if (!_v0.a.b) {
-				return $elm$core$List$length(pattern);
-			} else {
-				if (!_v0.b.b) {
-					return $elm$core$List$length(text);
-				} else {
-					if (!_v0.a.b.b) {
-						var _v1 = _v0.a;
-						var textHead = _v1.a;
-						return A2(
-							$elm$core$List$any,
-							$elm$core$Basics$eq(textHead),
-							pattern) ? ($elm$core$List$length(pattern) - 1) : $elm$core$List$length(pattern);
-					} else {
-						if (!_v0.b.b.b) {
-							var _v2 = _v0.b;
-							var patternHead = _v2.a;
-							return A2(
-								$elm$core$List$any,
-								$elm$core$Basics$eq(patternHead),
-								text) ? ($elm$core$List$length(text) - 1) : $elm$core$List$length(text);
-						} else {
-							var _v3 = _v0.a;
-							var textHead = _v3.a;
-							var textTail = _v3.b;
-							var _v4 = _v0.b;
-							var patternHead = _v4.a;
-							var patternTail = _v4.b;
-							if (_Utils_eq(textHead, patternHead)) {
-								var $temp$text = textTail,
-									$temp$pattern = patternTail;
-								text = $temp$text;
-								pattern = $temp$pattern;
-								continue levenshtein;
-							} else {
-								return A2(
-									$elm$core$Maybe$withDefault,
-									-1,
-									$author$project$EditDistance$last(
-										A4(
-											$author$project$EditDistance$textLoop,
-											text,
-											pattern,
-											1,
-											A2(
-												$elm$core$List$range,
-												1,
-												$elm$core$List$length(pattern)))));
-							}
-						}
-					}
-				}
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
 			}
 		}
 	});
-var $elm$core$Debug$log = _Debug_log;
-var $elm_community$list_extra$List$Extra$minimumBy = F2(
-	function (f, ls) {
-		var minBy = F2(
-			function (x, _v1) {
-				var y = _v1.a;
-				var fy = _v1.b;
-				var fx = f(x);
-				return (_Utils_cmp(fx, fy) < 0) ? _Utils_Tuple2(x, fx) : _Utils_Tuple2(y, fy);
-			});
-		if (ls.b) {
-			if (!ls.b.b) {
-				var l_ = ls.a;
-				return $elm$core$Maybe$Just(l_);
-			} else {
-				var l_ = ls.a;
-				var ls_ = ls.b;
-				return $elm$core$Maybe$Just(
-					A3(
-						$elm$core$List$foldl,
-						minBy,
-						_Utils_Tuple2(
-							l_,
-							f(l_)),
-						ls_).a);
-			}
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
 		} else {
-			return $elm$core$Maybe$Nothing;
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1.$) {
+				case 'LT':
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
 		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $elm$core$Dict$map = F2(
+	function (func, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				A2(func, key, value),
+				A2($elm$core$Dict$map, func, left),
+				A2($elm$core$Dict$map, func, right));
+		}
+	});
+var $author$project$Grader$updateTable = F4(
+	function (msgToString, msg, correct, table) {
+		if (A2($elm$core$List$member, msg, correct)) {
+			return A2(
+				$elm$core$Dict$map,
+				F2(
+					function (m, _v0) {
+						var c = _v0.a;
+						var i = _v0.b;
+						var e = _v0.c;
+						return _Utils_eq(
+							msgToString(msg),
+							m) ? _Utils_Tuple3(c + 1, i, e) : _Utils_Tuple3(c, i, e);
+					}),
+				table);
+		} else {
+			var correctStrings = A2($elm$core$List$map, msgToString, correct);
+			var total = $elm$core$List$length(correctStrings);
+			return A2(
+				$elm$core$Dict$map,
+				F2(
+					function (m, _v1) {
+						var c = _v1.a;
+						var i = _v1.b;
+						var e = _v1.c;
+						return _Utils_eq(
+							msgToString(msg),
+							m) ? _Utils_Tuple3(c, i + 1, e) : (A2($elm$core$List$member, m, correctStrings) ? _Utils_Tuple3(c, i, e + (1 / total)) : _Utils_Tuple3(c, i, e));
+					}),
+				table);
+		}
+	});
+var $author$project$Grader$gradeHelper = F5(
+	function (msgToString, updater, getNext, msg, _v0) {
+		var state = _v0.a;
+		var table = _v0.b;
+		var intermediateStates = _v0.c;
+		var userNextState = A2(updater, msg, state);
+		var next = getNext(state);
+		return _Utils_Tuple3(
+			userNextState,
+			A4($author$project$Grader$updateTable, msgToString, msg, next, table),
+			A2(
+				$elm$core$List$append,
+				intermediateStates,
+				_List_fromArray(
+					[userNextState])));
+	});
+var $author$project$Grader$gradeRun = F6(
+	function (objective, allMsgs, msgToString, updater, getNext, run) {
+		var table = $elm$core$Dict$fromList(
+			A2(
+				$elm$core$List$map,
+				function (m) {
+					return _Utils_Tuple2(
+						m,
+						_Utils_Tuple3(0, 0, 0));
+				},
+				allMsgs));
+		var _v0 = A3(
+			$elm$core$List$foldl,
+			F2(
+				function (m, _v1) {
+					var s = _v1.a;
+					var ms = _v1.b;
+					return _Utils_eq(
+						s,
+						A2(updater, m, s)) ? _Utils_Tuple2(s, ms) : _Utils_Tuple2(
+						A2(updater, m, s),
+						A2(
+							$elm$core$List$append,
+							ms,
+							_List_fromArray(
+								[m])));
+				}),
+			_Utils_Tuple2(run.initState, _List_Nil),
+			run.user);
+		var useful_run = _v0.b;
+		var del = A2($author$project$Grader$delta, run.correct, useful_run);
+		var _v2 = A3(
+			$elm$core$List$foldl,
+			A3($author$project$Grader$gradeHelper, msgToString, updater, getNext),
+			_Utils_Tuple3(run.initState, table, _List_Nil),
+			useful_run);
+		var finalState = _v2.a;
+		var finalTable = _v2.b;
+		return (objective(finalState) && ((del <= 10) && ($author$project$Grader$actionsInfo(finalTable) >= 1))) ? $author$project$Grader$A : (((del <= 50) && ($author$project$Grader$actionsInfo(finalTable) >= 0.5)) ? $author$project$Grader$C : (($author$project$Grader$actionsInfo(finalTable) > 0) ? $author$project$Grader$D : $author$project$Grader$F));
 	});
 var $elm_community$undo_redo$UndoList$new = F2(
 	function (event, _v0) {
@@ -7063,12 +7273,9 @@ var $author$project$Core$Analytics$Parser$list = function (parser) {
 var $elm$core$Set$Set_elm_builtin = function (a) {
 	return {$: 'Set_elm_builtin', a: a};
 };
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
-var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Set$empty = $elm$core$Set$Set_elm_builtin($elm$core$Dict$empty);
 var $elm$parser$Parser$ExpectingVariable = {$: 'ExpectingVariable'};
 var $elm$parser$Parser$Advanced$isSubChar = _Parser_isSubChar;
-var $elm$core$Basics$compare = _Utils_compare;
 var $elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
@@ -8432,6 +8639,7 @@ var $author$project$Core$Analytics$Encoder$encodeAction = function (actionString
 					$elm$parser$Parser$deadEndsToString(lst))));
 	}
 };
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Core$Analytics$Encoder$encodeModel = function (modelString) {
 	var parsedModel = A2($elm$parser$Parser$run, $author$project$Core$Analytics$Parser$parse, modelString);
 	if (parsedModel.$ === 'Ok') {
@@ -8511,8 +8719,8 @@ var $elm_community$undo_redo$UndoList$undo = function (_v0) {
 			A2($elm$core$List$cons, present, future));
 	}
 };
-var $author$project$DrivingTest$update = F7(
-	function (updater, isEnabled, next, msgType, analyticsPort, wrapperMessage, exp) {
+var $author$project$DrivingTest$update = F8(
+	function (updater, isEnabled, next, msgType, gradeRubric, analyticsPort, wrapperMessage, exp) {
 		var log = F2(
 			function (logMsg, logState) {
 				return A2(
@@ -8653,30 +8861,9 @@ var $author$project$DrivingTest$update = F7(
 							msgType,
 							updater,
 							_Utils_Tuple2(startState.present.state, _List_Nil));
-						var minED = A2(
-							$elm$core$Maybe$withDefault,
-							_Utils_Tuple2(0, _List_Nil),
-							A2(
-								$elm_community$list_extra$List$Extra$minimumBy,
-								$elm$core$Tuple$first,
-								A2(
-									$elm$core$List$map,
-									function (cs) {
-										return _Utils_Tuple2(
-											A2($author$project$EditDistance$levenshtein, exp.present.user, cs),
-											cs);
-									},
-									correctRuns)));
-						var _v9 = _Utils_Tuple2(
-							minED.a,
-							$elm$core$List$length(minED.b));
-						var d = _v9.a;
-						var n = _v9.b;
-						var score = A2(
-							$elm$core$Debug$log,
-							'Score',
-							$author$project$DrivingTest$Scored(
-								_Utils_Tuple2(((n - d) / n) * 100, minED.b)));
+						var run = A3($author$project$Grader$Run, startState.present.state, correctRuns, exp.present.user);
+						var score = $author$project$DrivingTest$Scored(
+							A6($author$project$Grader$gradeRun, gradeRubric.objective, gradeRubric.allMsg, gradeRubric.msgToString, updater, next, run));
 						var newExp = _Utils_update(
 							present,
 							{correct: correctRuns, score: score});
@@ -8705,13 +8892,6 @@ var $elm$core$List$all = F2(
 			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
 			list);
 	});
-var $elm$core$List$isEmpty = function (xs) {
-	if (!xs.b) {
-		return true;
-	} else {
-		return false;
-	}
-};
 var $ThinkAlexandria$css_in_elm$Css$Structure$dropEmptyDeclarations = function (declarations) {
 	dropEmptyDeclarations:
 	while (true) {
@@ -11871,6 +12051,18 @@ var $author$project$DrivingTest$viewPrimaryButtons = function (btns) {
 var $author$project$DrivingTest$CancelSubmit = {$: 'CancelSubmit'};
 var $author$project$DrivingTest$ConfirmSubmit = {$: 'ConfirmSubmit'};
 var $elm$core$Char$fromCode = _Char_fromCode;
+var $author$project$Grader$gradeToString = function (g) {
+	switch (g.$) {
+		case 'A':
+			return 'A';
+		case 'C':
+			return 'C';
+		case 'D':
+			return 'D';
+		default:
+			return 'F';
+	}
+};
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -11988,9 +12180,7 @@ var $author$project$DrivingTest$viewScore = function (score) {
 							]))
 					]));
 		default:
-			var _v1 = score.a;
-			var s = _v1.a;
-			var c = _v1.b;
+			var g = score.a;
 			return A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -12031,7 +12221,7 @@ var $author$project$DrivingTest$viewScore = function (score) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Driving Test Status')
+														$elm$html$Html$text('Driving Test Grade')
 													]))
 											])),
 										A2(
@@ -12042,7 +12232,8 @@ var $author$project$DrivingTest$viewScore = function (score) {
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text('Submitted for Grading')
+												$elm$html$Html$text(
+												'Your Grade is ' + $author$project$Grader$gradeToString(g))
 											]))
 									]))
 							]))
@@ -12104,7 +12295,7 @@ var $author$project$DrivingTest$sandbox = function (impl) {
 			subscriptions: function (_v0) {
 				return $elm$core$Platform$Sub$none;
 			},
-			update: A5($author$project$DrivingTest$update, impl.update, impl.isEnabled, impl.next, impl.msgType, impl.analyticsPort),
+			update: A6($author$project$DrivingTest$update, impl.update, impl.isEnabled, impl.next, impl.msgType, impl.gradeRubric, impl.analyticsPort),
 			view: A2($author$project$DrivingTest$view, impl.btns, impl.view)
 		});
 };
@@ -12530,9 +12721,6 @@ var $ianmackenzie$elm_geometry$QuadraticSpline2d$arcLengthParameterization = fun
 var $ianmackenzie$elm_geometry$QuadraticSpline2d$arcLength = function (parameterizedSpline) {
 	return $ianmackenzie$elm_geometry$ArcLengthParameterization$totalArcLength(
 		$ianmackenzie$elm_geometry$QuadraticSpline2d$arcLengthParameterization(parameterizedSpline));
-};
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
 };
 var $elm$core$Basics$sqrt = _Basics_sqrt;
 var $ianmackenzie$elm_units$Quantity$zero = $ianmackenzie$elm_units$Quantity$Quantity(0);
@@ -13009,10 +13197,6 @@ var $ianmackenzie$elm_units_interval$Quantity$Interval$isSingleton = function (_
 	var b = _v1.b;
 	return _Utils_eq(a, b);
 };
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
 var $ianmackenzie$elm_units_interval$Quantity$Interval$add = F2(
 	function (_v0, _v1) {
 		var delta = _v0.a;
@@ -16875,114 +17059,6 @@ var $goyalarchit$elm_dagre$Dagre$Normalize$splitEdgeAndUpdateEdges = F3(
 			edges);
 		return A2($elm$core$List$append, removedFromEdges, splitEdges);
 	});
-var $elm$core$Dict$Black = {$: 'Black'};
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$Red = {$: 'Red'};
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 'EQ':
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
 	while (true) {
@@ -17394,18 +17470,6 @@ var $goyalarchit$elm_dagre$Dagre$Normalize$checkAndSplitMultiSpanEdge = F2(
 				_Utils_Tuple2(edges, controlPoints));
 		}
 	});
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
-};
 var $goyalarchit$elm_dagre$Dagre$Normalize$addDummyNodesAndSplitEdges = function (_v0) {
 	var rankLayers = _v0.a;
 	var edges = _v0.b;
@@ -17869,25 +17933,6 @@ var $goyalarchit$elm_dagre$Dagre$Utils$getEdges = function (g) {
 var $goyalarchit$elm_dagre$Dagre$Attributes$LR = {$: 'LR'};
 var $goyalarchit$elm_dagre$Dagre$Attributes$RL = {$: 'RL'};
 var $goyalarchit$elm_dagre$Dagre$Attributes$BT = {$: 'BT'};
-var $elm$core$Dict$map = F2(
-	function (func, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return $elm$core$Dict$RBEmpty_elm_builtin;
-		} else {
-			var color = dict.a;
-			var key = dict.b;
-			var value = dict.c;
-			var left = dict.d;
-			var right = dict.e;
-			return A5(
-				$elm$core$Dict$RBNode_elm_builtin,
-				color,
-				key,
-				A2(func, key, value),
-				A2($elm$core$Dict$map, func, left),
-				A2($elm$core$Dict$map, func, right));
-		}
-	});
 var $goyalarchit$elm_dagre$Dagre$Position$applyRankDir = F2(
 	function (rankDir, init_coords) {
 		var coords_ = (_Utils_eq(rankDir, $goyalarchit$elm_dagre$Dagre$Attributes$BT) || _Utils_eq(rankDir, $goyalarchit$elm_dagre$Dagre$Attributes$RL)) ? A2(
@@ -18027,26 +18072,6 @@ var $goyalarchit$elm_dagre$Dagre$Position$BK$Down = {$: 'Down'};
 var $goyalarchit$elm_dagre$Dagre$Position$BK$Left = {$: 'Left'};
 var $goyalarchit$elm_dagre$Dagre$Position$BK$Right = {$: 'Right'};
 var $goyalarchit$elm_dagre$Dagre$Position$BK$Up = {$: 'Up'};
-var $elm$core$List$minimum = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return $elm$core$Maybe$Just(
-			A3($elm$core$List$foldl, $elm$core$Basics$min, x, xs));
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $elm$core$Dict$values = function (dict) {
-	return A3(
-		$elm$core$Dict$foldr,
-		F3(
-			function (key, value, valueList) {
-				return A2($elm$core$List$cons, value, valueList);
-			}),
-		_List_Nil,
-		dict);
-};
 var $goyalarchit$elm_dagre$Dagre$Position$BK$alignCoordinates = F2(
 	function (xss, alignTo) {
 		var minX = function (xs) {
@@ -18100,10 +18125,6 @@ var $goyalarchit$elm_dagre$Dagre$Position$BK$alignCoordinates = F2(
 			deltas);
 		return xss_;
 	});
-var $elm$core$List$sortBy = _List_sortBy;
-var $elm$core$List$sort = function (xs) {
-	return A2($elm$core$List$sortBy, $elm$core$Basics$identity, xs);
-};
 var $goyalarchit$elm_dagre$Dagre$Position$BK$balance = function (xss) {
 	var helper = F3(
 		function (n, x, xsC) {
@@ -18177,6 +18198,35 @@ var $goyalarchit$elm_dagre$Dagre$Position$BK$balance = function (xss) {
 			}),
 		sortedMultiXs);
 };
+var $elm_community$list_extra$List$Extra$minimumBy = F2(
+	function (f, ls) {
+		var minBy = F2(
+			function (x, _v1) {
+				var y = _v1.a;
+				var fy = _v1.b;
+				var fx = f(x);
+				return (_Utils_cmp(fx, fy) < 0) ? _Utils_Tuple2(x, fx) : _Utils_Tuple2(y, fy);
+			});
+		if (ls.b) {
+			if (!ls.b.b) {
+				var l_ = ls.a;
+				return $elm$core$Maybe$Just(l_);
+			} else {
+				var l_ = ls.a;
+				var ls_ = ls.b;
+				return $elm$core$Maybe$Just(
+					A3(
+						$elm$core$List$foldl,
+						minBy,
+						_Utils_Tuple2(
+							l_,
+							f(l_)),
+						ls_).a);
+			}
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
 var $goyalarchit$elm_dagre$Dagre$Position$BK$width = function (config) {
 	return function (nodeId) {
 		return A2(
@@ -20177,6 +20227,15 @@ var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$fontSize = function
 			{fontSize: f});
 	};
 };
+var $goyalarchit$elm_dagre$Dagre$Attributes$height = function (h) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				height: $elm$core$Basics$abs(h)
+			});
+	};
+};
 var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$label = function (f) {
 	return function (edc) {
 		return _Utils_update(
@@ -20189,6 +20248,24 @@ var $goyalarchit$elm_dagre$Render$nodeDrawer = function (f) {
 		return _Utils_update(
 			dc,
 			{nodeDrawer: f});
+	};
+};
+var $goyalarchit$elm_dagre$Dagre$Attributes$nodeSep = function (nSep) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				nodeSep: $elm$core$Basics$abs(nSep)
+			});
+	};
+};
+var $goyalarchit$elm_dagre$Dagre$Attributes$rankSep = function (rSep) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				rankSep: $elm$core$Basics$abs(rSep)
+			});
 	};
 };
 var $TSFoster$elm_tuple_extra$Tuple3$second = function (_v0) {
@@ -20359,15 +20436,6 @@ var $goyalarchit$elm_dagre$Dagre$Attributes$rankDir = function (rDir) {
 			{rankDir: rDir});
 	};
 };
-var $goyalarchit$elm_dagre$Dagre$Attributes$rankSep = function (rSep) {
-	return function (a) {
-		return _Utils_update(
-			a,
-			{
-				rankSep: $elm$core$Basics$abs(rSep)
-			});
-	};
-};
 var $goyalarchit$elm_dagre$Render$StandardDrawers$Attributes$shape = function (f) {
 	return function (ndc) {
 		return _Utils_update(
@@ -20531,6 +20599,15 @@ var $author$project$ListView$viewVars = function (vars) {
 			},
 			vars));
 };
+var $goyalarchit$elm_dagre$Dagre$Attributes$width = function (w) {
+	return function (a) {
+		return _Utils_update(
+			a,
+			{
+				width: $elm$core$Basics$abs(w)
+			});
+	};
+};
 var $author$project$HeapSortTest$xlbl = F2(
 	function (model, n) {
 		return (_Utils_eq(n.id, model.i) && _Utils_eq(n.id, model.b)) ? _Utils_Tuple3('i,b', '4 4', 2) : (_Utils_eq(n.id, model.i) ? _Utils_Tuple3('i', '4 4', 2) : (_Utils_eq(n.id, model.b) ? _Utils_Tuple3('b', '4 4', 2) : _Utils_Tuple3('', '', 1)));
@@ -20552,7 +20629,13 @@ var $author$project$HeapSortTest$view = function (state) {
 			[
 				A3(
 				$goyalarchit$elm_dagre$Render$draw,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$goyalarchit$elm_dagre$Dagre$Attributes$width(24),
+						$goyalarchit$elm_dagre$Dagre$Attributes$height(24),
+						$goyalarchit$elm_dagre$Dagre$Attributes$rankSep(30),
+						$goyalarchit$elm_dagre$Dagre$Attributes$nodeSep(30)
+					]),
 				_List_fromArray(
 					[
 						$goyalarchit$elm_dagre$Render$style(' width: 50%; height: 100%'),
@@ -20621,6 +20704,6 @@ var $author$project$HeapSortTest$view = function (state) {
 			]));
 };
 var $author$project$HeapSortTest$main = $author$project$DrivingTest$sandbox(
-	{analyticsPort: $author$project$HeapSortTest$analytics, btns: $author$project$HeapSortTest$btns, init: $author$project$HeapSortTest$init, isEnabled: $author$project$HeapSortTest$isEnabled, msgType: $author$project$HeapSortTest$msgType, next: $author$project$HeapSortTest$next, update: $author$project$HeapSortTest$update, view: $author$project$HeapSortTest$view});
+	{analyticsPort: $author$project$HeapSortTest$analytics, btns: $author$project$HeapSortTest$btns, gradeRubric: $author$project$HeapSortTest$gradeRubric, init: $author$project$HeapSortTest$init, isEnabled: $author$project$HeapSortTest$isEnabled, msgType: $author$project$HeapSortTest$msgType, next: $author$project$HeapSortTest$next, update: $author$project$HeapSortTest$update, view: $author$project$HeapSortTest$view});
 _Platform_export({'HeapSortTest':{'init':$author$project$HeapSortTest$main(
 	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));

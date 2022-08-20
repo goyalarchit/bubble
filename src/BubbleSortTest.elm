@@ -306,12 +306,21 @@ msgType msg =
         _ ->
             DT.TSMsg
 
+gradeRubric =
+    DT.GradeRubric (\n -> List.sort n.ts.numbers == n.ts.numbers) allMsgs actionToName
+
+allMsgs =
+    [ Increment
+    , SwapAndIncrement
+    , DecrementBAndResetI
+    ] |> List.map actionToName
 
 main =
     DT.sandbox
         { init = init
         , view = view
         , btns = btns
+        , gradeRubric = gradeRubric
         , update = update
         , isEnabled = isEnabled
         , next = next
